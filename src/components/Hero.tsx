@@ -3,7 +3,7 @@ import { hireMeHref, profile } from '~/data/portfolio'
 import { Icon } from './Icon'
 import { MorphPill } from './MorphPill'
 
-const clients = ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe', 'Warwick']
+const clients = ['MathCo', 'Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe', 'Warwick']
 
 const float = (delay: number) => ({
   animate: { y: [0, -8, 0] },
