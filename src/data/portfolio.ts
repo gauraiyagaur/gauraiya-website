@@ -69,7 +69,7 @@ export const profile = {
   role: 'Data Scientist & Multi-Agent AI Developer',
   location: 'Coventry, UK',
   intro:
-    "Hi, I’m Gauraiya — a data scientist turned AI developer out of the University of Warwick. AI is way more than template images and social media trends. I build multi-agent systems that turn complex problems into simple, everyday tools — giving you expert-level insights right where you need them most. No fluff. Just practical AI built for real life.",
+    "Hi, I’m Gauraiya, a data scientist turned AI developer out of the University of Warwick. AI is way more than template images and social media trends. I build multi-agent systems that turn complex problems into simple, everyday tools, giving you expert-level insights right where you need them most. No fluff. Just practical AI built for real life.",
   metaDescription:
     'Gauraiya Gaur — data scientist turned AI developer (MSc Business Analytics & AI, University of Warwick). Building practical multi-agent and neuro-symbolic AI systems.',
   portrait: '/portrait.jpg',

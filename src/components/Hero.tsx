@@ -10,7 +10,7 @@ export function Hero() {
             {profile.role}
           </p>
 
-          <h1 id="hero-title" className="display mt-6 text-[clamp(3.5rem,13vw,9.5rem)]">
+          <h1 id="hero-title" className="display mt-6 text-[clamp(3.5rem,13vw,9.5rem)] font-bold">
             Gauraiya
             <br />
             Gaur<span className="text-magenta">.</span>
