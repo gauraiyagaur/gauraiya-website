@@ -93,10 +93,10 @@ export const navLinks = [
 export const kpis: KpiMetric[] = [
   { id: 'industry', value: '3.5+', label: 'Industry Execution', sublabel: 'Years shipping enterprise data & AI solutions.' },
   { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years of continuous building, research & upskilling.' },
-  // TODO: exact number of completed projects
-  { id: 'projects', value: TBC, label: 'Completed Projects', sublabel: 'End-to-end ML & agentic systems shipped.' },
-  // TODO: exact number of distinction modules / research outputs
-  { id: 'distinction', value: TBC, label: 'Distinction & Research', sublabel: 'Distinction modules & research outputs.' },
+  // TODO: exact number of independent projects
+  { id: 'independent', value: TBC, label: 'Independent Projects', sublabel: 'Self-driven ML & agentic systems, built end to end.' },
+  // TODO: exact number of client projects
+  { id: 'client', value: TBC, label: 'Client Projects', sublabel: 'Enterprise data & AI work delivered for clients.' },
 ]
 
 export const journey: JourneyMilestone[] = [
