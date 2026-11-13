@@ -161,7 +161,7 @@ export const journey: JourneyMilestone[] = [
     tag: 'MSc Milestones',
     icon: 'trophy',
     title: 'Distinction in 4 modules',
-    organization: 'MSc Business Analytics & AI, University of Warwick (overall: Merit)',
+    organization: 'MSc Business Analytics & AI, University of Warwick',
     period: '2026',
     summary: 'Earned Distinction in four core modules, leading group projects along the way.',
     chipsLabel: 'Distinction in',
