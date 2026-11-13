@@ -116,7 +116,7 @@ export const navLinks = [
 export const kpis: KpiMetric[] = [
   { id: 'industry', value: '3.5+', label: 'Industry Execution', sublabel: 'Years shipping enterprise data & AI solutions.' },
   { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years of continuous building, research & upskilling.' },
-  { id: 'independent', value: '6', label: 'Independent Projects', sublabel: 'Self-driven ML, optimisation & agentic systems.' },
+  { id: 'independent', value: '6+', label: 'Independent Projects', sublabel: '6 shipped, 4 more in progress across ML, optimisation & agents.' },
   { id: 'client', value: '5', label: 'Client Projects', sublabel: 'Enterprise data & AI work for global brands.' },
 ]
 
