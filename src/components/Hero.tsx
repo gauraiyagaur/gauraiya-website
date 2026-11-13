@@ -104,10 +104,6 @@ export function Hero() {
               Key insight · The human edge
             </p>
             <p className="mt-2 text-base font-extrabold leading-snug tracking-tight">I speak every room’s language.</p>
-            <div className="mt-3 flex items-baseline gap-2 rounded-xl bg-pink-soft/60 px-3 py-2">
-              <span className="text-xl font-extrabold text-pink">4</span>
-              <span className="text-xs leading-snug text-ink-soft">global brands’ leadership teams partnered with directly</span>
-            </div>
             <p className="mt-2 text-xs leading-relaxed text-ink-soft">
               Praised for stakeholder management, and connects with people of any age group over shared interests.
             </p>
