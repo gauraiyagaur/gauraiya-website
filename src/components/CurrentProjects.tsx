@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import { currentBuilds } from '~/data/portfolio'
 
 export function CurrentProjects() {
@@ -10,13 +11,13 @@ export function CurrentProjects() {
             <h2 id="lab-title" className="display text-4xl sm:text-5xl lg:text-6xl">
               Current builds.
             </h2>
-            <p className="mt-4 max-w-2xl text-base text-white/70 sm:text-lg">Ongoing R&amp;D — not shipped yet, moving fast.</p>
+            <p className="mt-4 max-w-2xl text-base text-white/70 sm:text-lg">Ongoing R&amp;D. Not shipped yet, moving fast.</p>
           </div>
         </div>
 
         <ul className="mt-10 grid gap-6 md:grid-cols-3">
           {currentBuilds.map((b) => (
-            <li key={b.id} className="flex flex-col border border-white/30 p-5 transition-colors hover:border-neon sm:p-6">
+            <motion.li key={b.id} whileHover={{ y: -4 }} className="flex flex-col border border-white/30 p-5 transition-colors hover:border-neon sm:p-6">
               <span className="eyebrow inline-flex w-fit items-center gap-2 bg-neon px-2 py-1 text-[0.6875rem] text-ink">
                 <span className="relative flex h-2 w-2" aria-hidden>
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-magenta opacity-75" />
@@ -35,10 +36,12 @@ export function CurrentProjects() {
               </ul>
               {b.linkUrl ? (
                 <a href={b.linkUrl} className="mt-auto pt-6 font-mono text-xs font-bold uppercase tracking-wider text-neon underline underline-offset-4">
-                  View ↗<span className="sr-only"> — {b.title}</span>
+                  View ↗<span className="sr-only">: {b.title}</span>
                 </a>
+              ) : b.linkNote ? (
+                <p className="mt-auto pt-6 font-mono text-[0.6875rem] uppercase tracking-wider text-white/50">{b.linkNote}</p>
               ) : null}
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>

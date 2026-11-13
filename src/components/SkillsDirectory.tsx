@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'motion/react'
 import { skillCategories } from '~/data/portfolio'
 import { SectionHeading } from './SectionHeading'
 
@@ -26,11 +27,19 @@ export function SkillsDirectory() {
                 type="button"
                 aria-pressed={on}
                 onClick={() => setActive(f)}
-                className={`min-h-11 border-2 border-ink px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${
-                  on ? 'bg-ink text-neon' : 'bg-surface hover:bg-neon'
+                className={`relative min-h-11 rounded-full border-2 border-ink bg-surface px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${
+                  on ? 'text-ink' : 'hover:bg-paper'
                 }`}
               >
-                {f}
+                {on ? (
+                  <motion.span
+                    layoutId="skill-filter"
+                    className="absolute inset-0 rounded-full bg-neon"
+                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    aria-hidden
+                  />
+                ) : null}
+                <span className="relative">{f}</span>
               </button>
             )
           })}

@@ -1,89 +1,152 @@
-import { dissertationReview, journey } from '~/data/portfolio'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { journey, type JourneyMilestone } from '~/data/portfolio'
+import { Icon } from './Icon'
 import { SectionHeading } from './SectionHeading'
 
+const reveal = {
+  initial: { height: 0, opacity: 0 },
+  animate: { height: 'auto', opacity: 1 },
+  exit: { height: 0, opacity: 0 },
+  transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] as const },
+}
+
 export function LearningJourney() {
+  const [active, setActive] = useState<number | null>(null)
+  const toggle = (i: number) => setActive((cur) => (cur === i ? null : i))
+  const current = active === null ? null : journey[active]
+
   return (
     <section id="journey" aria-labelledby="journey-title" className="border-b border-ink py-16 sm:py-24">
       <div className="container-grid">
         <SectionHeading index="01" label="Journey" id="journey-title" title="The data-learning journey.">
-          From software roots to production data science to multi-agent research — five steps, one direction.
+          Five steps, one direction. Tap any step to open it.
         </SectionHeading>
 
-        <ol className="relative mt-4">
-          {journey.map((m) => (
-            <li key={m.step} className="grid gap-4 border-b border-line py-8 md:grid-cols-12 md:gap-8 md:py-10">
-              <div className="flex items-start gap-4 md:col-span-3 md:flex-col md:gap-3">
-                <span className="display flex h-14 w-14 shrink-0 items-center justify-center border-2 border-ink bg-neon text-2xl">
-                  {m.step}
-                </span>
-                <div>
-                  <p className="eyebrow">// {m.tag}</p>
-                  {m.period ? <p className="mt-1 font-mono text-xs text-muted">{m.period}</p> : null}
+        {/* Track */}
+        <div className="relative mt-12">
+          {/* Connecting line: horizontal on desktop, vertical on mobile */}
+          <div className="absolute left-7 top-0 h-full w-0.5 bg-line lg:left-0 lg:top-7 lg:h-0.5 lg:w-full" aria-hidden />
+          <motion.div
+            className="absolute left-7 top-0 hidden h-0.5 w-full origin-left bg-ink lg:top-7 lg:left-0 lg:block"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            aria-hidden
+          />
+          <motion.div
+            className="absolute left-7 top-0 h-full w-0.5 origin-top bg-ink lg:hidden"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            aria-hidden
+          />
+
+          <ol className="relative grid gap-8 lg:grid-cols-5 lg:gap-6">
+            {journey.map((m, i) => (
+              <motion.li
+                key={m.step}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="flex gap-5 lg:flex-col lg:gap-0"
+              >
+                <MilestoneNode m={m} open={active === i} onToggle={() => toggle(i)} />
+                <div className="min-w-0 flex-1 lg:mt-5">
+                  <p className="font-mono text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">
+                    {m.step} // {m.tag}
+                  </p>
+                  <h3 className="mt-1 font-display text-2xl font-extrabold leading-tight tracking-tight">{m.title}</h3>
+                  <p className="mt-2 text-sm leading-snug text-ink-soft">{m.summary}</p>
+                  {m.chips?.length ? (
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {m.chips.map((c) => (
+                        <li key={c} className="border border-ink bg-surface px-1.5 py-0.5 font-mono text-[0.625rem] uppercase tracking-wider">
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {/* Mobile: details open inline */}
+                  <div className="lg:hidden">
+                    <AnimatePresence initial={false}>
+                      {active === i ? (
+                        <motion.div key="d" {...reveal} className="overflow-hidden">
+                          <Details m={m} />
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </div>
                 </div>
-              </div>
-              <div className="md:col-span-9">
-                <h3 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">{m.title}</h3>
-                <p className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">{m.organization}</p>
-                <p className="mt-4 max-w-3xl leading-relaxed text-ink-soft">{m.summary}</p>
-                {m.highlights?.length ? (
-                  <ul className="mt-4 space-y-2">
-                    {m.highlights.map((h) => (
-                      <li key={h} className="flex gap-3 text-sm text-ink-soft">
-                        <span className="mt-1.5 h-2 w-2 shrink-0 bg-magenta" aria-hidden />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-                {m.isFeaturedReview ? <ReviewCard /> : null}
-              </div>
-            </li>
-          ))}
-        </ol>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Desktop: one shared detail panel under the track */}
+        <div className="hidden lg:block" aria-live="polite">
+          <AnimatePresence mode="wait" initial={false}>
+            {current ? (
+              <motion.div key={current.step} {...reveal} className="overflow-hidden">
+                <div className="mt-10 grid grid-cols-12 gap-8 border-2 border-ink bg-surface p-8 shadow-[6px_6px_0_#E6FF00,6px_6px_0_2px_#0A0A0A]">
+                  <div className="col-span-4">
+                    <p className="display text-7xl text-neon [-webkit-text-stroke:2px_#0A0A0A]">{current.step}</p>
+                    <p className="mt-3 font-display text-2xl font-extrabold tracking-tight">{current.title}</p>
+                    {current.period ? <p className="mt-1 font-mono text-xs text-muted">{current.period}</p> : null}
+                  </div>
+                  <div className="col-span-8">
+                    <Details m={current} />
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   )
 }
 
-function ReviewCard() {
-  const r = dissertationReview
+function MilestoneNode({ m, open, onToggle }: { m: JourneyMilestone; open: boolean; onToggle: () => void }) {
   return (
-    <details className="group mt-8 border-2 border-ink bg-surface shadow-[6px_6px_0_#E6FF00,6px_6px_0_2px_#0A0A0A]" open>
-      <summary className="flex cursor-pointer list-none items-start justify-between gap-4 bg-ink p-5 text-white sm:p-6 [&::-webkit-details-marker]:hidden">
-        <div>
-          <p className="eyebrow text-neon">Featured · Academic Review</p>
-          <p className="mt-2 font-display text-xl font-extrabold tracking-tight sm:text-2xl">{r.title}</p>
-          <p className="mt-2 max-w-2xl text-sm text-white/75">{r.context}</p>
-        </div>
-        <span
-          className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center border-2 border-neon font-mono text-lg text-neon"
-          aria-hidden
-        >
-          <span className="transition-transform group-open:rotate-45">+</span>
-        </span>
-      </summary>
-      <div className="grid gap-px bg-ink md:grid-cols-2">
-        <div className="bg-surface p-5 sm:p-6">
-          <p className="eyebrow">
-            <span className="bg-neon px-1">What worked</span>
-          </p>
-          <ul className="mt-4 space-y-5">
-            {r.worked.map((w) => (
-              <li key={w.title}>
-                <p className="font-semibold">{w.title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-ink-soft">{w.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-paper p-5 sm:p-6">
-          <p className="eyebrow">
-            <span className="bg-magenta px-1 text-white">The candid takeaway</span>
-          </p>
-          <p className="mt-4 font-display text-2xl font-extrabold tracking-tight">{r.takeaway.title}</p>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{r.takeaway.body}</p>
-        </div>
-      </div>
-    </details>
+    <motion.button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      aria-label={`${open ? 'Close' : 'Open'} step ${m.step}: ${m.title}`}
+      whileHover={{ rotate: -6, scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      animate={{ backgroundColor: open ? '#0A0A0A' : '#E6FF00', color: open ? '#E6FF00' : '#0A0A0A' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      className="relative z-10 flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center border-2 border-ink"
+    >
+      <Icon name={m.icon} size={26} />
+      <span className="absolute -bottom-2 -right-2 flex h-5 w-5 items-center justify-center border-2 border-ink bg-surface text-ink">
+        <motion.span className="flex" animate={{ rotate: open ? 45 : 0 }}>
+          <Icon name="plus" size={10} stroke={3.5} />
+        </motion.span>
+      </span>
+    </motion.button>
+  )
+}
+
+function Details({ m }: { m: JourneyMilestone }) {
+  return (
+    <div className="pt-4 lg:pt-0">
+      <p className="font-mono text-[0.6875rem] uppercase tracking-wider text-muted">{m.organization}</p>
+      {m.highlights?.length ? (
+        <ul className="mt-3 space-y-2">
+          {m.highlights.map((h) => (
+            <li key={h} className="flex gap-3 text-sm leading-relaxed text-ink-soft">
+              <span className="mt-1.5 h-2 w-2 shrink-0 bg-magenta" aria-hidden />
+              {h}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   )
 }

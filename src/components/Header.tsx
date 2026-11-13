@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { hireMeHref, navLinks, profile } from '~/data/portfolio'
+import { MorphPill } from './MorphPill'
 
 export function Header() {
   const [open, setOpen] = useState(false)
@@ -30,9 +31,9 @@ export function Header() {
               {l.label}
             </a>
           ))}
-          <a href={hireMeHref} className="btn btn-gradient ml-3 min-h-10 px-4 py-2 text-xs">
+          <MorphPill href={hireMeHref} variant="gradient" size="sm" className="ml-3">
             Hire Me
-          </a>
+          </MorphPill>
         </nav>
 
         <button

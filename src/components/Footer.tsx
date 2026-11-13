@@ -1,8 +1,9 @@
 import { hireMeHref, profile } from '~/data/portfolio'
+import { MorphPill } from './MorphPill'
 
 const links = [
   { label: 'Email', href: `mailto:${profile.email}`, text: profile.email },
-  { label: 'LinkedIn', href: profile.linkedin, text: 'in/gauraiya-gaur' },
+  { label: 'LinkedIn', href: profile.linkedin, text: 'Gauraiya Gaur' },
   { label: 'GitHub', href: profile.github, text: 'gauraiyagaur' },
   { label: 'CV', href: profile.cvUrl, text: 'Download PDF', download: true },
 ]
@@ -21,9 +22,11 @@ export function Footer() {
               <br />
               something <span className="bg-neon px-2">real</span>.
             </h2>
-            <a href={hireMeHref} className="btn btn-gradient mt-10">
-              Hire Me <span aria-hidden>→</span>
-            </a>
+            <div className="mt-10">
+              <MorphPill href={hireMeHref} variant="gradient">
+                Hire Me
+              </MorphPill>
+            </div>
           </div>
           <ul className="self-end border-t-2 border-ink lg:col-span-5">
             {links.map((l) => (
@@ -49,7 +52,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {profile.name} · {profile.location}
           </p>
-          <p>Custom TanStack Start build · visual inspiration from Lovable &amp; Dribbble</p>
+          <p>Custom TanStack Start build · Visual inspiration from Lovable &amp; Dribbble</p>
         </div>
       </div>
     </footer>

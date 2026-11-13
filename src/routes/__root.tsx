@@ -5,8 +5,9 @@ import appCss from '~/styles.css?url'
 import { Header } from '~/components/Header'
 import { Footer } from '~/components/Footer'
 import { profile } from '~/data/portfolio'
+import { MotionConfig } from 'motion/react'
 
-const title = `${profile.name} — ${profile.role}`
+const title = `${profile.name} | ${profile.role}`
 
 export const Route = createRootRoute({
   head: () => ({
@@ -41,6 +42,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
+      <MotionConfig reducedMotion="user">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-neon focus:px-4 focus:py-2 focus:font-mono focus:text-sm"
@@ -52,6 +54,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <Footer />
+      </MotionConfig>
     </RootDocument>
   )
 }

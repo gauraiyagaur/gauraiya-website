@@ -1,4 +1,5 @@
 import { hireMeHref, profile } from '~/data/portfolio'
+import { MorphPill } from './MorphPill'
 
 export function Hero() {
   return (
@@ -18,23 +19,16 @@ export function Hero() {
 
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-xl">{profile.intro}</p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <a href={hireMeHref} className="btn btn-gradient">
-              Hire Me <span aria-hidden>→</span>
-            </a>
-            <a href="#work" className="btn btn-outline">
+          <div className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
+            <MorphPill href={hireMeHref} variant="gradient">
+              Hire Me
+            </MorphPill>
+            <MorphPill href="#work" variant="neon">
               My Work
-            </a>
-            <a
-              href={profile.cvUrl}
-              download
-              className="group inline-flex min-h-12 items-center gap-2 px-1 font-mono text-xs font-bold uppercase tracking-wider underline decoration-2 underline-offset-4 hover:decoration-magenta"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
-                <path d="M8 1v10M3.5 6.5 8 11l4.5-4.5M2 14h12" fill="none" stroke="currentColor" strokeWidth="2" />
-              </svg>
-              Download CV <span className="font-normal text-muted">(PDF)</span>
-            </a>
+            </MorphPill>
+            <MorphPill href={profile.cvUrl} variant="outline" icon="download" download>
+              Download CV
+            </MorphPill>
           </div>
         </div>
 
