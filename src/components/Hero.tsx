@@ -95,20 +95,18 @@ export function Hero() {
 
           <motion.div
             {...float(1.2)}
-            className="card absolute -right-4 top-1/3 hidden w-56 p-4 sm:block"
-            aria-hidden
+            className="card absolute -right-4 top-1/3 hidden w-64 p-4 sm:block"
           >
-            <p className="text-xs font-semibold text-ink-soft">RAG retrieval precision</p>
-            <p className="mt-1 text-2xl font-extrabold text-mint">+37.7%</p>
-            <div className="mt-3 flex h-12 items-end gap-1.5">
-              {[30, 42, 38, 55, 48, 68, 80].map((h, i) => (
-                <span
-                  key={i}
-                  className={`flex-1 rounded-full ${i === 6 ? 'bg-accent' : 'bg-accent-soft'}`}
-                  style={{ height: `${h}%` }}
-                />
-              ))}
-            </div>
+            <p className="flex items-center gap-2 text-xs font-semibold text-pink">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-pink-soft">
+                <Icon name="users" size={13} stroke={2.5} />
+              </span>
+              Key insight · Soft skills
+            </p>
+            <p className="mt-2 text-base font-extrabold leading-snug tracking-tight">I speak every room’s language.</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
+              Praised for stakeholder management, and connects with people of any age group over shared interests.
+            </p>
           </motion.div>
 
           <motion.div

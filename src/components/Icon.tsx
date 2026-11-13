@@ -1,11 +1,12 @@
 import type { IconName } from '~/data/portfolio'
 
-const paths: Record<IconName | 'lock' | 'arrow' | 'download' | 'plus' | 'github', string> = {
+const paths: Record<IconName | 'users' | 'lock' | 'arrow' | 'download' | 'plus' | 'github', string> = {
   code: 'M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16',
   spark: 'M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3.5 3.5M15.5 15.5 19 19M19 5l-3.5 3.5M8.5 15.5 5 19',
   briefcase: 'M3 8h18v12H3zM8 8V5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v3M3 13h18',
   leap: 'M3 17l6-6 4 4 8-8M15 7h6v6',
   trophy: 'M7 4h10v5a5 5 0 0 1-10 0zM7 6H3v1a4 4 0 0 0 4 4M17 6h4v1a4 4 0 0 1-4 4M12 14v4M8 21h8M9 18h6',
+  users: 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 12 0v1M16 3.5a4 4 0 0 1 0 7.5M18 21v-1a6 6 0 0 0-3-5.2',
   lock: 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4',
   arrow: 'M5 12h14M13 6l6 6-6 6',
   download: 'M12 3v12M7 10l5 5 5-5M4 20h16',
