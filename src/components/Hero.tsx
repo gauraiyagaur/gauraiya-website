@@ -118,7 +118,7 @@ export function Hero() {
               <Icon name="briefcase" size={16} />
             </span>
             <div>
-              <p className="text-sm font-extrabold leading-none">3.5+ yrs</p>
+              <p className="text-sm font-extrabold leading-none">3.5 yrs</p>
               <p className="mt-1 text-xs text-ink-soft">Enterprise data science</p>
             </div>
           </motion.div>
