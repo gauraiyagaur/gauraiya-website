@@ -95,16 +95,20 @@ export function Hero() {
 
           <motion.div
             {...float(1.2)}
-            className="card absolute -right-4 top-1/3 hidden w-64 p-4 sm:block"
+            className="card absolute -right-4 top-1/3 hidden w-64 p-4 sm:block lg:-right-12"
           >
             <p className="flex items-center gap-2 text-xs font-semibold text-pink">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-pink-soft">
                 <Icon name="users" size={13} stroke={2.5} />
               </span>
-              Key insight · Soft skills
+              Key insight · The human edge
             </p>
             <p className="mt-2 text-base font-extrabold leading-snug tracking-tight">I speak every room’s language.</p>
-            <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
+            <div className="mt-3 flex items-baseline gap-2 rounded-xl bg-pink-soft/60 px-3 py-2">
+              <span className="text-xl font-extrabold text-pink">4</span>
+              <span className="text-xs leading-snug text-ink-soft">global brands’ leadership teams partnered with directly</span>
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-ink-soft">
               Praised for stakeholder management, and connects with people of any age group over shared interests.
             </p>
           </motion.div>
