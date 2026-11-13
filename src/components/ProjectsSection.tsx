@@ -71,10 +71,22 @@ function ExpandCard({
       layout
       onHoverStart={() => setHover(true)}
       onHoverEnd={() => setHover(false)}
-      animate={{ boxShadow: open ? '6px 6px 0px #0A0A0A' : '0px 0px 0px #0A0A0A', y: open && !alwaysOpen ? -4 : 0 }}
+      animate={{
+        boxShadow: open ? '6px 6px 0px #0A0A0A' : '0px 0px 0px #0A0A0A',
+        y: open && !alwaysOpen ? -4 : 0,
+        borderColor: open ? 'rgba(10,10,10,1)' : 'rgba(10,10,10,0.35)',
+      }}
       transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-      className="relative flex flex-col border-2 border-ink bg-surface"
+      className="relative flex flex-col overflow-hidden border-[1.5px] bg-surface"
     >
+      {/* Neon accent bar */}
+      <motion.span
+        className="absolute inset-y-0 left-0 w-1.5 origin-top bg-neon"
+        initial={false}
+        animate={{ scaleY: open ? 1 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        aria-hidden
+      />
       {header}
       {!alwaysOpen ? (
         <button
@@ -82,7 +94,7 @@ function ExpandCard({
           onClick={() => setPinned((v) => !v)}
           aria-expanded={open}
           aria-label={`${pinned ? 'Hide' : 'Show'} details: ${label}`}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center border-2 border-ink bg-surface hover:bg-neon"
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center border-[1.5px] border-ink bg-surface hover:bg-neon"
         >
           <motion.span animate={{ rotate: open ? 45 : 0 }} className="flex">
             <Icon name="plus" size={14} stroke={3} />
@@ -132,7 +144,10 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
         <h4 className={`mt-3 font-display font-extrabold leading-tight tracking-tight ${featured ? 'text-3xl sm:text-4xl' : 'text-xl sm:text-2xl'}`}>
           {p.title}
         </h4>
-        <p className="mt-3 text-sm leading-relaxed text-ink-soft sm:text-base">{p.summary}</p>
+        <p className="mt-2 text-sm leading-relaxed text-ink-soft sm:text-base">{featured ? p.summary : p.hook}</p>
+        <div className="mt-4">
+          <Stack items={p.stack} />
+        </div>
       </div>
       {p.reflection ? (
         <div className="mt-6 grid gap-px border-2 border-ink bg-ink lg:col-span-5 lg:mt-0">
@@ -154,14 +169,18 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
   )
 
   const details = (
-    <div className="space-y-4 border-t-2 border-ink p-5 sm:p-6">
+    <div className="space-y-4 border-t-[1.5px] border-ink p-5 sm:p-6">
+      {!featured ? (
+        <p className="text-sm leading-relaxed text-ink-soft">
+          <strong className="font-semibold text-ink">Approach.</strong> {p.summary}
+        </p>
+      ) : null}
       {p.impact ? (
         <p className="border-l-4 border-neon bg-paper py-2 pl-3 pr-2 text-sm leading-relaxed">
           <span className="eyebrow mr-1 text-[0.6875rem]">Impact:</span>
           {p.impact}
         </p>
       ) : null}
-      <Stack items={p.stack} />
       <div className="flex flex-wrap items-center gap-4 pt-1">
         {p.repoUrl ? (
           <a
@@ -192,18 +211,23 @@ function ClientCard({ c }: { c: ClientProject }) {
       </p>
       <p className="mt-3 font-display text-2xl font-black tracking-tight">{c.client}</p>
       <h4 className="mt-1 font-semibold leading-snug">{c.title}</h4>
+      <p className="mt-1 text-sm text-ink-soft">{c.hook}</p>
+      <div className="mt-4">
+        <Stack items={c.stack} />
+      </div>
     </div>
   )
   const details = (
-    <div className="space-y-4 border-t-2 border-ink p-5 sm:p-6">
-      <p className="text-sm leading-relaxed text-ink-soft">{c.summary}</p>
+    <div className="space-y-4 border-t-[1.5px] border-ink p-5 sm:p-6">
+      <p className="text-sm leading-relaxed text-ink-soft">
+        <strong className="font-semibold text-ink">Approach.</strong> {c.summary}
+      </p>
       {c.impact ? (
         <p className="border-l-4 border-neon bg-paper py-2 pl-3 pr-2 text-sm leading-relaxed">
           <span className="eyebrow mr-1 text-[0.6875rem]">Impact:</span>
           {c.impact}
         </p>
       ) : null}
-      <Stack items={c.stack} />
     </div>
   )
   return <ExpandCard header={header} details={details} label={`${c.client}: ${c.title}`} />

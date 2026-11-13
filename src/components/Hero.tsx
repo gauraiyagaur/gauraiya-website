@@ -23,10 +23,10 @@ export function Hero() {
             <MorphPill href={hireMeHref} variant="gradient">
               Hire Me
             </MorphPill>
-            <MorphPill href="#work" variant="neon">
+            <MorphPill href="#work" variant="outline">
               My Work
             </MorphPill>
-            <MorphPill href={profile.cvUrl} variant="outline" icon="download" download>
+            <MorphPill href={profile.cvUrl} variant="neon" icon="download" download>
               Download CV
             </MorphPill>
           </div>
@@ -45,16 +45,16 @@ export function Hero() {
               fetchPriority="high"
             />
             <figcaption className="flex items-center justify-between border-t-2 border-ink px-4 py-3 font-mono text-[0.6875rem] uppercase tracking-wider">
-              <span>{profile.location}</span>
-              <span className="bg-ink px-2 py-0.5 text-neon">Open to roles</span>
+              <span className="tabular-nums">LOC: UK // MSc Warwick</span>
+              <span className="inline-flex items-center gap-2 bg-ink px-2 py-0.5 text-neon">
+                <span className="relative flex h-2 w-2" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neon" />
+                </span>
+                Open to roles
+              </span>
             </figcaption>
           </figure>
-          <div
-            className="absolute -left-3 top-6 hidden rotate-[-6deg] border-2 border-ink bg-surface px-3 py-2 font-mono text-[0.6875rem] font-bold uppercase tracking-wider shadow-[4px_4px_0_#0A0A0A] sm:block"
-            aria-hidden
-          >
-            MSc · Warwick
-          </div>
         </div>
       </div>
     </section>

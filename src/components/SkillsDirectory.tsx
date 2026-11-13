@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { skillCategories } from '~/data/portfolio'
 import { SectionHeading } from './SectionHeading'
 
@@ -48,23 +48,33 @@ export function SkillsDirectory() {
           Showing {count} skills
         </p>
 
-        <div className="mt-8 grid gap-px border-2 border-ink bg-ink sm:grid-cols-2">
+        <motion.div layout className="mt-8 grid gap-px border-2 border-ink bg-ink sm:grid-cols-2">
+          <AnimatePresence mode="popLayout" initial={false}>
           {visible.map((c) => (
-            <div key={c.category} className={`bg-surface p-5 sm:p-6 ${visible.length === 1 ? 'sm:col-span-2' : ''}`}>
+            <motion.div
+              layout
+              key={c.category}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className={`bg-surface p-5 sm:p-6 ${visible.length === 1 ? 'sm:col-span-2' : ''}`}
+            >
               <h3 className="eyebrow flex items-center justify-between">
                 <span>{c.category}</span>
                 <span className="text-muted">{String(c.skills.length).padStart(2, '0')}</span>
               </h3>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {c.skills.map((s) => (
-                  <li key={s} className="pill text-xs hover:bg-neon">
+                  <li key={s} className="pill text-xs">
                     {s}
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )

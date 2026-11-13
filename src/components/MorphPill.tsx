@@ -7,7 +7,7 @@ type Variant = 'gradient' | 'neon' | 'outline'
 const styles: Record<Variant, string> = {
   gradient: 'border-ink text-ink [background:var(--gradient-cta)]',
   neon: 'border-ink bg-neon text-ink',
-  outline: 'border-ink bg-surface text-ink',
+  outline: 'border-ink bg-surface text-ink transition-colors hover:bg-neon focus-visible:bg-neon',
 }
 
 /**
