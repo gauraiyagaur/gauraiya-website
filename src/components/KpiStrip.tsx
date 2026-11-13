@@ -30,20 +30,23 @@ function CountUp({ value }: { value: string }) {
 
 export function KpiStrip() {
   return (
-    <section aria-label="Key numbers" className="border-b border-ink bg-surface">
-      <div className="container-grid">
-        <dl className="grid grid-cols-2 gap-px border-x border-ink bg-ink lg:grid-cols-4">
-          {kpis.map((k) => (
-            <div key={k.id} className="group flex flex-col gap-2 bg-surface p-4 transition-colors hover:bg-paper sm:p-6 lg:p-8">
-              <dt className="eyebrow order-2 mt-1 text-[0.6875rem] sm:text-xs">
-                <span className="bg-neon px-1">{k.label}</span>
-              </dt>
-              <dd
-                className={`order-1 font-mono text-5xl font-bold tracking-tighter sm:text-6xl ${k.value === TBC ? 'text-muted/60' : ''}`}
-              >
+    <section aria-label="Key numbers" className="container-grid">
+      <div className="relative overflow-hidden rounded-[2rem] px-6 py-10 text-white sm:px-10 sm:py-14 [background:linear-gradient(135deg,#150c2e_0%,#2a1657_60%,#3b1d7a_100%)]">
+        {/* Glow + dotted texture */}
+        <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -bottom-24 left-10 h-60 w-60 rounded-full bg-pink/25 blur-3xl" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.15] [background-image:radial-gradient(rgba(255,255,255,0.6)_1px,transparent_1px)] [background-size:18px_18px]"
+          aria-hidden
+        />
+        <dl className="relative grid grid-cols-2 gap-y-10 lg:grid-cols-4">
+          {kpis.map((k, i) => (
+            <div key={k.id} className={`px-2 sm:px-6 ${i > 0 ? 'lg:border-l lg:border-white/15' : ''} ${i % 2 === 1 ? 'border-l border-white/15 lg:border-l' : ''}`}>
+              <dd className={`text-5xl font-extrabold tracking-tight sm:text-6xl ${k.value === TBC ? 'text-white/40' : ''}`}>
                 {k.value === TBC ? k.value : <CountUp value={k.value} />}
               </dd>
-              <dd className="order-3 text-sm leading-snug text-ink-soft">{k.sublabel}</dd>
+              <dt className="mt-3 text-sm font-bold">{k.label}</dt>
+              <dd className="mt-1 text-sm leading-snug text-white/60">{k.sublabel}</dd>
             </div>
           ))}
         </dl>

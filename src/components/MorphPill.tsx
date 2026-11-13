@@ -2,22 +2,20 @@ import type { ReactNode } from 'react'
 import { motion } from 'motion/react'
 import { Icon } from './Icon'
 
-type Variant = 'gradient' | 'neon' | 'outline'
+type Variant = 'primary' | 'soft' | 'outline' | 'light'
 
 const styles: Record<Variant, string> = {
-  gradient: 'border-ink text-ink [background:var(--gradient-cta)]',
-  neon: 'border-ink bg-neon text-ink',
-  outline: 'border-ink bg-surface text-ink transition-colors hover:bg-neon focus-visible:bg-neon',
+  primary: 'text-white [background:var(--gradient-cta)]',
+  soft: 'bg-accent-soft text-accent',
+  outline: 'border border-line bg-surface text-ink',
+  light: 'bg-white text-accent',
 }
 
-/**
- * A pill-shaped CTA that morphs on hover: the pill squares off, lifts onto a
- * hard shadow, and an arrow slides in.
- */
+/** Rounded CTA that lifts on hover and slides in an arrow. */
 export function MorphPill({
   href,
   children,
-  variant = 'neon',
+  variant = 'primary',
   icon = 'arrow',
   download,
   className = '',
@@ -33,7 +31,8 @@ export function MorphPill({
   size?: 'sm' | 'md'
   onClick?: () => void
 }) {
-  const pad = size === 'sm' ? 'min-h-10 px-4 text-xs' : 'min-h-12 px-6 text-[0.8125rem]'
+  const pad = size === 'sm' ? 'min-h-10 px-4 text-sm' : 'min-h-12 px-6 text-[0.9375rem]'
+  const glow = variant === 'primary' ? '0px 16px 30px -10px rgba(108,71,255,0.6)' : '0px 14px 26px -14px rgba(20,17,43,0.25)'
   return (
     <motion.a
       href={href}
@@ -45,12 +44,12 @@ export function MorphPill({
       whileFocus="hover"
       whileTap="tap"
       variants={{
-        rest: { borderRadius: 999, x: 0, y: 0, boxShadow: '0px 0px 0px #0A0A0A' },
-        hover: { borderRadius: 4, x: -3, y: -3, boxShadow: '5px 5px 0px #0A0A0A' },
-        tap: { borderRadius: 4, x: 0, y: 0, boxShadow: '0px 0px 0px #0A0A0A' },
+        rest: { y: 0, scale: 1, boxShadow: '0px 0px 0px rgba(0,0,0,0)' },
+        hover: { y: -2, scale: 1.02, boxShadow: glow },
+        tap: { y: 0, scale: 0.98, boxShadow: '0px 0px 0px rgba(0,0,0,0)' },
       }}
       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-      className={`inline-flex items-center justify-center gap-0 border-2 font-mono font-bold uppercase tracking-[0.06em] ${pad} ${styles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full font-semibold ${pad} ${styles[variant]} ${className}`}
     >
       <span>{children}</span>
       <motion.span

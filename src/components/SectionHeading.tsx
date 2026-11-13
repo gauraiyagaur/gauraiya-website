@@ -1,29 +1,28 @@
 import type { ReactNode } from 'react'
 
 export function SectionHeading({
-  index,
   label,
   title,
   children,
   id,
+  dark = false,
 }: {
-  index: string
+  index?: string
   label: string
   title: ReactNode
   children?: ReactNode
   id: string
+  dark?: boolean
 }) {
   return (
-    <div className="grid gap-6 border-b border-ink pb-8 md:grid-cols-12 md:gap-8">
-      <p className="eyebrow md:col-span-3">
-        <span className="bg-neon px-1.5 py-0.5">({index})</span> {label}
-      </p>
-      <div className="md:col-span-9">
-        <h2 id={id} className="display text-4xl sm:text-5xl lg:text-6xl">
-          {title}
-        </h2>
-        {children ? <div className="mt-4 max-w-2xl text-base text-ink-soft sm:text-lg">{children}</div> : null}
-      </div>
+    <div className="mx-auto max-w-3xl text-center">
+      <p className={`eyebrow mx-auto ${dark ? 'bg-white/10 text-white' : ''}`}>{label}</p>
+      <h2 id={id} className={`display mt-4 text-4xl sm:text-5xl ${dark ? 'text-white' : ''}`}>
+        {title}
+      </h2>
+      {children ? (
+        <div className={`mx-auto mt-4 max-w-2xl text-base sm:text-lg ${dark ? 'text-white/70' : 'text-ink-soft'}`}>{children}</div>
+      ) : null}
     </div>
   )
 }

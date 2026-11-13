@@ -34,12 +34,13 @@ export function Header() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink bg-surface/85 backdrop-blur-md">
-      <div className="container-grid flex h-16 items-center justify-between gap-4">
-        <a href="#top" className="display text-xl tracking-tight sm:text-2xl" aria-label={`${profile.name}, back to top`}>
-          <span className="hidden sm:inline">GAURAIYA GAUR</span>
-          <span className="sm:hidden">{profile.shortName}</span>
-          <span className="ml-1 inline-block h-2.5 w-2.5 bg-neon align-middle ring-1 ring-ink" aria-hidden />
+    <header className="sticky top-3 z-50 px-3 sm:top-4">
+      <div className="mx-auto flex h-16 max-w-[74rem] items-center justify-between gap-4 rounded-full border border-line bg-white/80 pl-3 pr-2 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+        <a href="#top" className="flex items-center gap-2.5" aria-label={`${profile.name}, back to top`}>
+          <span className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold text-white [background:var(--gradient-cta)]">
+            GG
+          </span>
+          <span className="hidden text-base font-extrabold tracking-tight sm:inline">{profile.name}</span>
         </a>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 md:flex" onMouseLeave={() => setHovered(null)}>
@@ -51,12 +52,12 @@ export function Header() {
               onFocus={() => setHovered(l.href)}
               onBlur={() => setHovered(null)}
               aria-current={active && `#${active}` === l.href ? 'true' : undefined}
-              className="relative px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider"
+              className="relative rounded-full px-4 py-2 text-sm font-semibold text-ink-soft transition-colors hover:text-ink aria-[current]:text-ink"
             >
               {highlight === l.href ? (
                 <motion.span
                   layoutId="nav-pill"
-                  className="absolute inset-x-1 bottom-1 h-2 rounded-full bg-neon"
+                  className="absolute inset-0 rounded-full bg-accent-soft"
                   transition={{ type: 'spring', stiffness: 500, damping: 35 }}
                   aria-hidden
                 />
@@ -64,14 +65,14 @@ export function Header() {
               <span className="relative">{l.label}</span>
             </a>
           ))}
-          <MorphPill href={hireMeHref} variant="gradient" size="sm" className="ml-3">
+          <MorphPill href={hireMeHref} variant="primary" size="sm" className="ml-2">
             Hire Me
           </MorphPill>
         </nav>
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center border-2 border-ink bg-neon md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-accent-soft text-accent md:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}
@@ -88,21 +89,25 @@ export function Header() {
       </div>
 
       {open ? (
-        <nav id="mobile-menu" aria-label="Mobile" className="border-t border-ink bg-ink md:hidden">
-          <ul className="container-grid flex flex-col py-2">
+        <nav id="mobile-menu" aria-label="Mobile" className="mx-auto mt-2 max-w-[74rem] overflow-hidden rounded-3xl border border-line bg-white shadow-[var(--shadow-lift)] md:hidden">
+          <ul className="flex flex-col px-5 py-2">
             {navLinks.map((l) => (
               <li key={l.href}>
                 <a
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="display block border-b border-white/15 py-4 text-3xl text-white hover:text-neon"
+                  className="block border-b border-line py-4 text-2xl font-bold tracking-tight hover:text-accent"
                 >
                   {l.label}
                 </a>
               </li>
             ))}
             <li className="py-5">
-              <a href={hireMeHref} onClick={() => setOpen(false)} className="btn btn-gradient w-full">
+              <a
+                href={hireMeHref}
+                onClick={() => setOpen(false)}
+                className="flex min-h-12 w-full items-center justify-center rounded-full font-semibold text-white [background:var(--gradient-cta)]"
+              >
                 Hire Me
               </a>
             </li>

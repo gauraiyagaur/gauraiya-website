@@ -4,13 +4,15 @@ import { clientProjects, clientWorkNote, profile, projects, type ClientProject, 
 import { Icon } from './Icon'
 import { SectionHeading } from './SectionHeading'
 
+const ICON_COLORS = ['#6C47FF', '#12B886', '#F59F0B', '#F062B8', '#3B82F6', '#8B5CF6']
+
 export function ProjectsSection() {
   return (
-    <section id="work" aria-labelledby="work-title" className="border-b border-ink bg-surface py-16 sm:py-24">
+    <section id="work" aria-labelledby="work-title" className="py-20 sm:py-28">
       <div className="container-grid">
-        <SectionHeading index="02" label="Completed Work" id="work-title" title="Shipped & evaluated.">
+        <SectionHeading index="02" label="Completed work" id="work-title" title={<>Shipped <span className="text-gradient">&amp; evaluated.</span></>}>
           Hover or tap a card for the impact, stack and code.{' '}
-          <a href={profile.projectsRepo} className="font-medium text-ink underline decoration-2 underline-offset-4 hover:decoration-magenta">
+          <a href={profile.projectsRepo} className="font-semibold text-accent hover:underline">
             All code on GitHub ↗
           </a>
         </SectionHeading>
@@ -25,8 +27,8 @@ export function ProjectsSection() {
         </ul>
 
         <SubHeading count={clientProjects.length}>Client projects</SubHeading>
-        <p className="mt-4 flex max-w-3xl items-start gap-3 border-l-4 border-ink bg-paper py-3 pl-4 pr-3 text-sm text-ink-soft">
-          <Icon name="lock" size={18} className="mt-0.5 shrink-0 text-ink" />
+        <p className="mt-4 flex max-w-3xl items-start gap-3 rounded-2xl bg-accent-soft/60 px-4 py-3 text-sm text-ink-soft">
+          <Icon name="lock" size={18} className="mt-0.5 shrink-0 text-accent" />
           {clientWorkNote}
         </p>
         <ul className="mt-6 grid items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -43,9 +45,9 @@ export function ProjectsSection() {
 
 function SubHeading({ children, count }: { children: ReactNode; count: number }) {
   return (
-    <h3 className="mt-14 flex items-center gap-3 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+    <h3 className="mt-16 flex items-center gap-3 text-2xl font-extrabold tracking-tight sm:text-3xl">
       {children}
-      <span className="bg-neon px-2 py-0.5 font-mono text-sm font-bold">{String(count).padStart(2, '0')}</span>
+      <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-sm font-bold text-accent">{String(count).padStart(2, '0')}</span>
     </h3>
   )
 }
@@ -72,18 +74,19 @@ function ExpandCard({
       onHoverStart={() => setHover(true)}
       onHoverEnd={() => setHover(false)}
       animate={{
-        boxShadow: open ? '6px 6px 0px #0A0A0A' : '0px 0px 0px #0A0A0A',
+        boxShadow: open
+          ? '0px 2px 4px rgba(20,17,43,0.04), 0px 28px 56px -20px rgba(76,45,200,0.28)'
+          : '0px 1px 2px rgba(20,17,43,0.04), 0px 12px 32px -12px rgba(20,17,43,0.12)',
         y: open && !alwaysOpen ? -4 : 0,
-        borderColor: open ? 'rgba(10,10,10,1)' : 'rgba(10,10,10,0.35)',
       }}
       transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-      className="relative flex flex-col overflow-hidden border-[1.5px] bg-surface"
+      className="relative flex flex-col overflow-hidden rounded-3xl border border-line bg-surface"
     >
-      {/* Neon accent bar */}
+      {/* Accent bar */}
       <motion.span
-        className="absolute inset-y-0 left-0 w-1.5 origin-top bg-neon"
+        className="absolute inset-x-0 top-0 h-1 origin-left [background:var(--gradient-cta)]"
         initial={false}
-        animate={{ scaleY: open ? 1 : 0 }}
+        animate={{ scaleX: open ? 1 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         aria-hidden
       />
@@ -94,7 +97,7 @@ function ExpandCard({
           onClick={() => setPinned((v) => !v)}
           aria-expanded={open}
           aria-label={`${pinned ? 'Hide' : 'Show'} details: ${label}`}
-          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center border-[1.5px] border-ink bg-surface hover:bg-neon"
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-paper text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent"
         >
           <motion.span animate={{ rotate: open ? 45 : 0 }} className="flex">
             <Icon name="plus" size={14} stroke={3} />
@@ -136,12 +139,14 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
   const header = (
     <div className={`p-5 pr-14 sm:p-6 sm:pr-14 ${featured ? 'lg:grid lg:grid-cols-12 lg:gap-8' : ''}`}>
       <div className={featured ? 'lg:col-span-7' : ''}>
-        <p className="eyebrow flex items-center gap-2 text-[0.6875rem]">
-          <span className="text-muted">{String(index + 1).padStart(2, '0')}</span>
-          {featured ? <span className="bg-neon px-1.5">Featured</span> : null}
-          <span>{p.category}</span>
-        </p>
-        <h4 className={`mt-3 font-display font-extrabold leading-tight tracking-tight ${featured ? 'text-3xl sm:text-4xl' : 'text-xl sm:text-2xl'}`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full text-white" style={{ backgroundColor: ICON_COLORS[index % ICON_COLORS.length] }}>
+            <Icon name={featured ? 'trophy' : 'spark'} size={18} />
+          </span>
+          {featured ? <span className="eyebrow !bg-pink-soft !text-pink">Featured</span> : null}
+          <span className="text-xs font-semibold text-muted">{p.category}</span>
+        </div>
+        <h4 className={`mt-4 font-extrabold leading-tight tracking-tight ${featured ? 'text-3xl sm:text-4xl' : 'text-xl sm:text-2xl'}`}>
           {p.title}
         </h4>
         <p className="mt-2 text-sm leading-relaxed text-ink-soft sm:text-base">{featured ? p.summary : p.hook}</p>
@@ -150,17 +155,13 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
         </div>
       </div>
       {p.reflection ? (
-        <div className="mt-6 grid gap-px border-2 border-ink bg-ink lg:col-span-5 lg:mt-0">
-          <div className="bg-surface p-4">
-            <p className="eyebrow text-[0.6875rem]">
-              <span className="bg-neon px-1">The win</span>
-            </p>
+        <div className="mt-6 grid gap-3 lg:col-span-5 lg:mt-0">
+          <div className="rounded-2xl bg-mint-soft/70 p-4">
+            <p className="eyebrow !bg-white !text-mint">The win</p>
             <p className="mt-2 text-sm leading-relaxed text-ink-soft">{p.reflection.win}</p>
           </div>
-          <div className="bg-paper p-4">
-            <p className="eyebrow text-[0.6875rem]">
-              <span className="bg-magenta px-1 text-white">The lesson</span>
-            </p>
+          <div className="rounded-2xl bg-pink-soft/60 p-4">
+            <p className="eyebrow !bg-white !text-pink">The lesson</p>
             <p className="mt-2 text-sm leading-relaxed text-ink-soft">{p.reflection.lesson}</p>
           </div>
         </div>
@@ -169,15 +170,15 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
   )
 
   const details = (
-    <div className="space-y-4 border-t-[1.5px] border-ink p-5 sm:p-6">
+    <div className="space-y-4 border-t border-line p-5 sm:p-6">
       {!featured ? (
         <p className="text-sm leading-relaxed text-ink-soft">
           <strong className="font-semibold text-ink">Approach.</strong> {p.summary}
         </p>
       ) : null}
       {p.impact ? (
-        <p className="border-l-4 border-neon bg-paper py-2 pl-3 pr-2 text-sm leading-relaxed">
-          <span className="eyebrow mr-1 text-[0.6875rem]">Impact:</span>
+        <p className="rounded-2xl bg-accent-soft/60 px-4 py-3 text-sm leading-relaxed">
+          <span className="mr-1 font-bold text-accent">Impact:</span>
           {p.impact}
         </p>
       ) : null}
@@ -185,17 +186,17 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
         {p.repoUrl ? (
           <a
             href={p.repoUrl}
-            className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider underline decoration-2 underline-offset-4 hover:bg-neon"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
           >
-            <Icon name="github" size={16} /> View code ↗<span className="sr-only">: {p.title}</span>
+            <Icon name="github" size={16} /> View code<span className="sr-only">: {p.title}</span>
           </a>
         ) : null}
         {p.liveUrl ? (
-          <a href={p.liveUrl} className="font-mono text-xs font-bold uppercase tracking-wider underline decoration-2 underline-offset-4 hover:bg-neon">
+          <a href={p.liveUrl} className="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-accent hover:text-accent">
             Live ↗<span className="sr-only">: {p.title}</span>
           </a>
         ) : null}
-        {!p.repoUrl && p.linkNote ? <span className="font-mono text-xs uppercase tracking-wider text-muted">{p.linkNote}</span> : null}
+        {!p.repoUrl && p.linkNote ? <span className="rounded-full bg-paper px-3 py-1.5 text-xs font-semibold text-muted">{p.linkNote}</span> : null}
       </div>
     </div>
   )
@@ -206,10 +207,10 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
 function ClientCard({ c }: { c: ClientProject }) {
   const header = (
     <div className="p-5 pr-14 sm:p-6 sm:pr-14">
-      <p className="eyebrow flex items-center gap-2 text-[0.6875rem] text-muted">
+      <p className="eyebrow">
         <Icon name="lock" size={12} stroke={2.5} /> Client · MathCo
       </p>
-      <p className="mt-3 font-display text-2xl font-black tracking-tight">{c.client}</p>
+      <p className="mt-4 text-2xl font-extrabold tracking-tight">{c.client}</p>
       <h4 className="mt-1 font-semibold leading-snug">{c.title}</h4>
       <p className="mt-1 text-sm text-ink-soft">{c.hook}</p>
       <div className="mt-4">
@@ -218,13 +219,13 @@ function ClientCard({ c }: { c: ClientProject }) {
     </div>
   )
   const details = (
-    <div className="space-y-4 border-t-[1.5px] border-ink p-5 sm:p-6">
+    <div className="space-y-4 border-t border-line p-5 sm:p-6">
       <p className="text-sm leading-relaxed text-ink-soft">
         <strong className="font-semibold text-ink">Approach.</strong> {c.summary}
       </p>
       {c.impact ? (
-        <p className="border-l-4 border-neon bg-paper py-2 pl-3 pr-2 text-sm leading-relaxed">
-          <span className="eyebrow mr-1 text-[0.6875rem]">Impact:</span>
+        <p className="rounded-2xl bg-accent-soft/60 px-4 py-3 text-sm leading-relaxed">
+          <span className="mr-1 font-bold text-accent">Impact:</span>
           {c.impact}
         </p>
       ) : null}
