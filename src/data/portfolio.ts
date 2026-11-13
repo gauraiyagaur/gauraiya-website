@@ -27,6 +27,8 @@ export interface JourneyMilestone {
   highlights?: string[]
   /** Short chips, e.g. client names or modules. */
   chips?: string[]
+  /** Optional label shown before the chips. */
+  chipsLabel?: string
 }
 
 export interface ProjectReflection {
@@ -158,12 +160,14 @@ export const journey: JourneyMilestone[] = [
     step: '05',
     tag: 'MSc Milestones',
     icon: 'trophy',
-    title: 'Distinction',
-    organization: 'University of Warwick',
+    title: 'Distinction in 4 modules',
+    organization: 'MSc Business Analytics & AI, University of Warwick (overall: Merit)',
     period: '2026',
-    summary: 'Graduated with Distinction, leading group projects along the way.',
+    summary: 'Earned Distinction in four core modules, leading group projects along the way.',
+    chipsLabel: 'Distinction in',
     chips: ['Optimisation', 'Generative AI', 'Forecasting', 'Analytics in Practice'],
     highlights: [
+      'Distinction modules: Optimisation, Generative AI, Forecasting, Analytics in Practice',
       'Built leadership skills leading group projects; praised by peers and professors for technical and communication skills',
       'Rated highly by peers throughout the course for doing more or higher-quality work than expected',
       'Makes important contributions that improve the team’s work',

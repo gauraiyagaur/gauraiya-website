@@ -61,8 +61,13 @@ export function LearningJourney() {
                   </p>
                   <h3 className="mt-1 font-display text-2xl font-extrabold leading-tight tracking-tight">{m.title}</h3>
                   <p className="mt-2 text-sm leading-snug text-ink-soft">{m.summary}</p>
+                  {m.chipsLabel ? (
+                    <p className="mt-3 font-mono text-[0.625rem] font-bold uppercase tracking-[0.12em]">
+                      <span className="bg-neon px-1">{m.chipsLabel}</span>
+                    </p>
+                  ) : null}
                   {m.chips?.length ? (
-                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                    <ul className={`${m.chipsLabel ? 'mt-1.5' : 'mt-3'} flex flex-wrap gap-1.5`}>
                       {m.chips.map((c) => (
                         <li key={c} className="border border-ink bg-surface px-1.5 py-0.5 font-mono text-[0.625rem] uppercase tracking-wider">
                           {c}
