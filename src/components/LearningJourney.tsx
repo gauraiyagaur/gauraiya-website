@@ -409,20 +409,27 @@ const ICON_STYLE: Record<NodeKind, string> = {
 }
 
 type FlowIconName = Parameters<typeof Icon>[0]['name']
+type Step = { t: string; k?: 'llm' | 'rule' }
 
 function FlowNode({
   kind,
   icon,
   tag,
   title,
+  meta,
   lines,
+  steps,
   delay = 0,
 }: {
   kind: NodeKind
   icon: FlowIconName
   tag?: string
   title: string
+  /** Model line, e.g. "Sonnet 4.6 · temp 0.0". */
+  meta?: string
   lines?: string[]
+  /** Sub-steps tagged as LLM or rule-based. */
+  steps?: Step[]
   delay?: number
 }) {
   const dark = kind === 'end'
@@ -443,6 +450,21 @@ function FlowNode({
         ) : null}
       </div>
       <p className={`mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight ${dark ? 'text-white' : 'text-ink'}`}>{title}</p>
+      {meta ? <p className="mt-0.5 whitespace-nowrap font-mono text-[0.5rem] font-semibold text-accent/80">{meta}</p> : null}
+      {steps?.length ? (
+        <ul className="mt-1.5 space-y-0.5">
+          {steps.map((st) => (
+            <li key={st.t} className="flex items-center gap-1 text-[0.5625rem] leading-snug text-ink-soft">
+              <span
+                className={`h-1.5 w-1.5 shrink-0 rounded-[2px] ${st.k === 'rule' ? 'bg-white ring-1 ring-ink/25' : 'bg-accent/60'}`}
+                aria-hidden
+              />
+              <span>{st.t}</span>
+              <span className="sr-only">{st.k === 'rule' ? '(rule-based)' : '(LLM)'}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
       {lines?.map((l) => (
         <p key={l} className={`mt-0.5 text-[0.5625rem] leading-snug ${dark ? 'text-white/70' : 'text-muted'}`}>
           {l}
@@ -506,24 +528,46 @@ function Glance() {
           <div className="min-w-[640px] p-4">
             {/* Row 1: brief → profiler → calibration → gate → refusal */}
             <div className="flex items-stretch">
-              <div className="w-[17%]">
-                <FlowNode kind="rule" icon="doc" tag="Input" title="Brand brief" lines={['Free text from the user']} />
+              <div className="w-[16%]">
+                <FlowNode kind="rule" icon="doc" tag="Entry point" title="Brand brief" lines={['Unstructured client brief, in free text']} />
               </div>
               <Arrow />
-              <div className="w-[19%]">
-                <FlowNode kind="llm" icon="profile" tag="Agent 1" title="Brand Profiler" lines={['Five-dimension brand profile']} delay={0.08} />
+              <div className="w-[20%]">
+                <FlowNode
+                  kind="llm"
+                  icon="profile"
+                  tag="Agent 1"
+                  title="Brand Profiler"
+                  meta="Sonnet 4.6 · temp 0.0"
+                  lines={['Out: BrandProfile, D1 to D5', 'Rarity · invisibility · values · motivation · control', 'Evidence span + confidence each']}
+                  delay={0.08}
+                />
               </div>
               <Arrow />
               <div className="w-[21%]">
-                <FlowNode kind="llm" icon="gauge" tag="Agent 2" title="Calibration & Gate" lines={['Rules score each axis', 'Sets the gate decision']} delay={0.16} />
+                <FlowNode
+                  kind="llm"
+                  icon="gauge"
+                  tag="Agent 2"
+                  title="Calibration & Gate"
+                  meta="Opus 4.6 · temp 0.0 + rules"
+                  steps={[
+                    { t: 'Gate', k: 'llm' },
+                    { t: 'Ceilings', k: 'rule' },
+                    { t: 'Locus filter', k: 'rule' },
+                    { t: 'Ranking', k: 'llm' },
+                  ]}
+                  lines={['Out: gate, bands, ranked loci']}
+                  delay={0.16}
+                />
               </div>
               <Arrow />
               <div className="flex items-center">
-                <Gate label="Go?" delay={0.24} />
+                <Gate label="Proceed?" delay={0.24} />
               </div>
               <Arrow label="No" tone="pink" />
               <div className="flex-1">
-                <FlowNode kind="stop" icon="ban" tag="Terminal" title="Reasoned refusal" lines={['Says no, with a written why']} delay={0.3} />
+                <FlowNode kind="stop" icon="ban" tag="Terminal" title="Reasoned refusal" lines={['Run ends with a written justification']} delay={0.3} />
               </div>
             </div>
 
@@ -551,16 +595,38 @@ function Glance() {
                 <Gate label="Verdict" delay={0.54} />
               </div>
               <Arrow dir="left" />
-              <div className="w-[21%]">
-                <FlowNode kind="llm" icon="shield" tag="Critic" title="Two-check review" lines={['Brand and axes respected?', 'Concept fits the brief?']} delay={0.46} />
+              <div className="w-[23%]">
+                <FlowNode
+                  kind="llm"
+                  icon="shield"
+                  tag="Critic"
+                  title="Two-check review"
+                  meta="Opus 4.6 · temp 0.0"
+                  steps={[
+                    { t: 'Claimed bands ≤ ceilings?', k: 'rule' },
+                    { t: 'Concept matches its bands?', k: 'llm' },
+                  ]}
+                  lines={['Verdict: pass, revise or escalate']}
+                  delay={0.46}
+                />
               </div>
               <Arrow dir="left" />
-              <div className="relative w-[22%]">
-                <FlowNode kind="llm" icon="bulb" tag="Agent 3" title="Ideation" lines={['Ideas inside the calibrated bands']} delay={0.38} />
+              <div className="w-[22%]">
+                <FlowNode
+                  kind="llm"
+                  icon="bulb"
+                  tag="Agent 3"
+                  title="Ideation"
+                  meta="Sonnet 4.6 · temp 0.7"
+                  lines={['In: top locus, ceilings, profile', 'Out: concept with mechanism, AI position, claimed visibility + intensity']}
+                  delay={0.38}
+                />
               </div>
-              <div className="flex w-[19%] items-center justify-center">
-                <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-1 text-[0.5rem] font-extrabold uppercase text-pink">
-                  <Icon name="loop" size={9} stroke={2.5} /> Revise: back to Agent 3
+              <div className="flex w-[17%] items-center justify-center">
+                <span className="inline-flex flex-col items-center rounded-xl bg-pink-soft px-2 py-1 text-center text-[0.5rem] font-extrabold uppercase leading-tight text-pink">
+                  <Icon name="loop" size={10} stroke={2.5} />
+                  Revise loop
+                  <span className="font-semibold normal-case">max 3 iterations</span>
                 </span>
               </div>
             </div>
@@ -573,10 +639,64 @@ function Glance() {
             </div>
 
             {/* Row 3: supporting pieces */}
-            <div className="grid grid-cols-3 gap-3">
-              <FlowNode kind="rule" icon="eye" tag="Safety net" title="Human review" lines={['Escalated cases go to a person']} delay={0.7} />
-              <FlowNode kind="rule" icon="database" tag="LangGraph" title="Shared state" lines={['State passed between agents']} delay={0.74} />
-              <FlowNode kind="rule" icon="sliders" tag="Calibration" title="Two calibrated axes" lines={['Low, medium and high bands', 'Computed by Agent 2']} delay={0.78} />
+            <div className="grid grid-cols-[1fr_1.25fr_1.25fr] gap-3">
+              <FlowNode kind="stop" icon="eye" tag="Terminal" title="Human review" lines={['Iteration budget spent without a passing concept']} delay={0.7} />
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.74, duration: 0.3 }}
+                className="rounded-xl border border-line bg-white px-2.5 py-2"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-md bg-paper text-ink-soft">
+                    <Icon name="database" size={12} stroke={2.25} />
+                  </span>
+                  <span className="text-[0.5rem] font-extrabold uppercase tracking-[0.12em] text-muted">LangGraph</span>
+                </div>
+                <p className="mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight text-ink">Shared state</p>
+                <ul className="mt-1.5 flex flex-wrap gap-1">
+                  {['run_id', 'brief', 'profile', 'calibration', 'concept', 'verdict', 'iteration', 'critic_history', 'terminal_state'].map((f) => (
+                    <li key={f} className="rounded bg-paper px-1 py-px font-mono text-[0.5rem] text-ink-soft">
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-1.5 text-[0.5625rem] leading-snug text-muted">Every agent reads what it needs and writes only its own field.</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.78, duration: 0.3 }}
+                className="rounded-xl border border-line bg-white px-2.5 py-2"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-md bg-paper text-ink-soft">
+                    <Icon name="sliders" size={12} stroke={2.25} />
+                  </span>
+                  <span className="text-[0.5rem] font-extrabold uppercase tracking-[0.12em] text-muted">Computed in Agent 2</span>
+                </div>
+                <p className="mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight text-ink">Two calibrated axes</p>
+                <div className="mt-1.5 space-y-1">
+                  <p className="text-[0.5625rem] leading-snug text-ink-soft">
+                    <span className="font-bold text-accent">Visibility</span> <span className="font-mono">← D2 + D4 + D5</span>
+                    <span className="block text-muted">How perceptible the AI is to the client</span>
+                  </p>
+                  <p className="text-[0.5625rem] leading-snug text-ink-soft">
+                    <span className="font-bold text-pink">Intensity</span> <span className="font-mono">← D1 + D3 + D5</span>
+                    <span className="block text-muted">How far the offering differentiates per person</span>
+                  </p>
+                </div>
+                <div className="mt-1.5 flex gap-1">
+                  {['Low ≤1', 'Medium ≤3', 'High ≥4'].map((b, n) => (
+                    <span
+                      key={b}
+                      className={`rounded-full px-1.5 py-px text-[0.5rem] font-bold ${['bg-mint-soft text-mint', 'bg-peach-soft text-peach', 'bg-pink-soft text-pink'][n]}`}
+                    >
+                      {b}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -586,7 +706,7 @@ function Glance() {
             <span className="h-2 w-2 rounded-sm bg-accent-soft ring-1 ring-accent/30" /> LLM judgement
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-white ring-1 ring-line" /> Deterministic
+            <span className="h-2 w-2 rounded-sm bg-white ring-1 ring-ink/25" /> Deterministic / rule-based
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="h-2 w-2 rotate-45 rounded-[2px] bg-sky-soft ring-1 ring-sky/40" /> Gate
