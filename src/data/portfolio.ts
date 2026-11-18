@@ -34,6 +34,15 @@ export interface JourneyMilestone {
   chips?: string[]
   /** Optional label shown before the chips. */
   chipsLabel?: string
+  /** Optional step-by-step path shown at the top of the details. */
+  path?: string[]
+  pathLabel?: string
+  /** Grouped details, shown side by side instead of `highlights`. */
+  groups?: { label: string; items: Highlight[] }[]
+  /** Brand names shown under the organisation line in the opened details. */
+  brands?: string[]
+  /** One standout line shown in a tinted box under the details. */
+  callout?: Highlight
 }
 
 export interface ProjectReflection {
@@ -98,6 +107,11 @@ export const profile = {
   portrait: '/portrait.jpg',
   portraitAlt: 'Gauraiya Gaur on a London street at Christmas',
   cvUrl: '/Gauraiya_Gaur_CV.pdf',
+  /** Two CV versions offered from the hero. Leave url empty until the PDF is in /public. */
+  cvs: [
+    { label: 'AI Developer', note: 'Multi-agent & LLM systems', url: '/Gauraiya_Gaur_CV.pdf' },
+    { label: 'Data Scientist', note: 'Analytics, ML & measurement', url: '' }, // TODO: add Data Scientist CV PDF
+  ],
   email: 'gauraiyagaurwork@gmail.com',
   linkedin: 'https://www.linkedin.com/in/gauraiya-gaur-7053081b5/',
   github: 'https://github.com/gauraiyagaur',
@@ -114,10 +128,10 @@ export const navLinks = [
 ]
 
 export const kpis: KpiMetric[] = [
-  { id: 'industry', value: '3.5', label: 'Industry Execution', sublabel: 'Years shipping enterprise data & AI solutions.' },
-  { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years of continuous building, research & upskilling.' },
+  { id: 'industry', value: '3.5 yrs', label: 'Industry Execution', sublabel: 'In shipping enterprise data & AI solutions.' },
+  { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years spent breaking, building, and mastering the AI stack.' },
   { id: 'independent', value: '6+', label: 'Independent Projects', sublabel: '6 shipped, 4 more in progress across ML, optimisation & agents.' },
-  { id: 'client', value: '5', label: 'Client Projects', sublabel: 'Enterprise data & AI work for global brands.' },
+  { id: 'client', value: '5', label: 'Client Projects', sublabel: 'Delivered for Fortune 500 & global retail brands.' },
 ]
 
 export const journey: JourneyMilestone[] = [
@@ -129,9 +143,26 @@ export const journey: JourneyMilestone[] = [
     organization: 'BSc Computer & Communication Engineering, Manipal University Jaipur',
     period: '2018 – 2022',
     summary: 'Algorithms, data structures and clean architecture, before any model.',
-    highlights: [
-      { lead: 'Systems first.', text: 'Learnt how clean systems are architected before touching a predictive model.' },
-      { lead: 'Grounded.', text: 'Algorithms, data structures and software engineering principles. CGPA 8/10.' },
+    path: ['Software dev', 'Hardware & networks', 'ACM · Python', 'Data Science elective', 'AI'],
+    pathLabel: 'How the plan changed',
+    groups: [
+      {
+        label: 'In the classroom',
+        items: [
+          { lead: 'Came in for code.', text: 'Arrived certain that software development was my calling.' },
+          { lead: 'Tried everything.', text: 'Hardware, data structures, networks. Learnt plenty, still felt unfulfilled.' },
+          { lead: 'A lucky conversation.', text: 'Friends pulled me into ACM for Python, and a Data Science elective got me hooked on AI.' },
+          { lead: 'Grounded.', text: 'Built a solid base in algorithms, data structures and software engineering, the foundation I still design AI systems on.' },
+        ],
+      },
+      {
+        label: 'Beyond the classroom',
+        items: [
+          { lead: 'Music.', text: 'Won ensemble competitions alongside my studies.' },
+          { lead: 'Found my voice.', text: 'Volunteering built my confidence and presence.' },
+          { lead: 'Rose through the ranks.', text: 'Volunteer → Assistant Secretary General → Treasurer, across clubs and fests.' },
+        ],
+      },
     ],
   },
   {
@@ -141,10 +172,24 @@ export const journey: JourneyMilestone[] = [
     title: 'Fell for ML',
     organization: 'Discovering predictive intelligence',
     summary: 'From writing rules to building systems that learn from messy data.',
-    highlights: [
-      { lead: 'First model.', text: 'Final-year project: machine-learning prediction of cardiovascular disease.' },
-      { lead: 'New mindset.', text: 'Shifted from deterministic rules to systems that learn patterns from real-world data.' },
+    groups: [
+      {
+        label: 'The project',
+        items: [
+          { lead: 'First model.', text: 'Final-year project predicting cardiovascular disease with ML.' },
+          { lead: 'New mindset.', text: 'From hand-written rules to systems that learn from data.' },
+        ],
+      },
+      {
+        label: 'Challenges I cracked',
+        items: [
+          { lead: 'Big data, first time.', text: 'Large Kaggle datasets, tamed with NumPy and pandas.' },
+          { lead: 'Learning to model.', text: 'Predictive modelling, learnt from scratch, end to end.' },
+          { lead: 'Measuring what matters.', text: 'My first model comparison, and the nuance of precision, recall, accuracy and F1.' },
+        ],
+      },
     ],
+    callout: { lead: 'The payoff.', text: 'This project landed my first job: Data Analyst at MathCo.' },
   },
   {
     step: '03',
@@ -154,11 +199,12 @@ export const journey: JourneyMilestone[] = [
     organization: 'Enterprise consulting & production delivery, Bangalore',
     period: '2022 – 2025',
     summary: 'Shipped ML for global brands. Analyst to lead measurement.',
-    chips: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
+    brands: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
     highlights: [
-      { lead: '~15% efficiency lift.', text: 'Early-intervention model for Customer Success, deployed end to end, paid off in month one.' },
+      { lead: '~15% efficiency lift.', text: 'Early-intervention model for Campaign Success, deployed end to end, paid off in month one.' },
+      { lead: 'Staffing simulator.', text: 'Built a simulator for an American electronics retailer to manage front-end staffing, improving close rate (orders billed or attended to at the desk).' },
+      { lead: 'Promoted to Data Scientist.', text: 'Moved up from analyst: ran cross-functional teams, mentored interns on their capstone project and coached team members, lifting the team’s efficiency.' },
       { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },
-      { lead: 'Led squads.', text: 'Moved from analyst to lead measurement, running cross-functional teams and building front-end decision simulators.' },
     ],
   },
   {
@@ -168,11 +214,28 @@ export const journey: JourneyMilestone[] = [
     title: 'Off to Warwick',
     organization: 'MSc Business Analytics & AI, Warwick Business School',
     period: '2025 – 2026',
-    summary: 'Left consulting for the frontier: LLMs, multi-agent and neuro-symbolic AI.',
-    highlights: [
-      { lead: 'Bet on depth.', text: 'Stepped away from full-time consulting and moved to the UK to deepen technical rigour.' },
-      { lead: 'Frontier focus.', text: 'Large language models, multi-agent orchestration and neuro-symbolic AI architectures.' },
+    summary: 'Left consulting for the frontier: advanced data analytics, neural networks, LLMs, agentic AI and RAG systems.',
+    groups: [
+      {
+        label: 'Why I went',
+        items: [
+          { lead: 'Hit a ceiling.', text: 'My toolkit capped my impact. With NLP and neural networks, I could have given GoFundMe exactly what they needed.' },
+          { lead: 'Bet on depth.', text: 'Left full-time consulting and moved to the UK for deeper technical rigour.' },
+          { lead: 'Biggest learning.', text: 'Reading what a problem truly needs, then reaching for the right tool to solve it.' },
+          { lead: 'Frontier focus.', text: 'Neural networks, optimisation, forecasting, LLMs, multi-agent orchestration and neuro-symbolic AI.' },
+        ],
+      },
+      {
+        label: 'Who I became',
+        items: [
+          { lead: 'All in.', text: 'Warwick is where I committed fully to learning.' },
+          { lead: 'Solo to team player.', text: 'A natural solo worker who learnt to thrive, and deliver more, in a brilliant cohort.' },
+          { lead: 'A global circle.', text: 'Friends from across the world, bonded over data, strategy, stats and finance.' },
+          { lead: 'Wider worldview.', text: 'Life beyond India sharpened my confidence and my view of where AI is heading.' },
+        ],
+      },
     ],
+    callout: { lead: 'Gillmore Centre.', text: 'Worked with the Gillmore Centre for Financial Technology.' },
   },
   {
     step: '05',
@@ -182,8 +245,6 @@ export const journey: JourneyMilestone[] = [
     organization: 'MSc Business Analytics & AI, University of Warwick',
     period: '2026',
     summary: 'Earned Distinction in four core modules, leading group projects along the way.',
-    chipsLabel: 'Distinction in',
-    chips: ['Optimisation', 'Generative AI', 'Forecasting', 'Analytics in Practice'],
     highlights: [
       { lead: 'Distinction in 4 modules.', text: 'Optimisation, Generative AI, Forecasting and Analytics in Practice.' },
       { lead: 'Led from the front.', text: 'Built leadership skills leading group projects; praised by peers and professors for technical and communication skills.' },
@@ -194,25 +255,18 @@ export const journey: JourneyMilestone[] = [
   },
 ]
 
-export const dissertationReview = {
-  tab: 'Dissertation Review: Luxcal',
-  title: 'Luxcal: multi-agent luxury market research',
+/** Step 05 second tab: a faux-UI view of the Luxcal architecture. */
+export const dissertationGlance = {
+  tab: 'Dissertation at a glance',
+  title: 'Luxcal: an AI calibration system',
+  subtitle: 'Multi-agent pipeline · LangGraph orchestration',
   stats: ['10,000 words', '11 brand cases', '5 ablation conditions'],
-  worked: [
-    { lead: 'Replicable methodology.', text: 'Examiners singled out the method: a clearly specified 11-cell action space and gate logic, specified well enough to rebuild from scratch.' },
-    { lead: 'Neuro-symbolic soundness.', text: 'Deterministic gate logic kept separate from LLM judgement, backed by ablation testing across five conditions.' },
-    { lead: 'Beyond safe domains.', text: 'Pushed multi-agent research into the nuanced constraints of luxury market research.' },
-  ] as Highlight[],
-  takeaway: {
-    lead: 'Rigour over speed.',
-    text: 'Examiner feedback flagged citation verification, baseline sample tracking (n = 30 vs n = 33) and structural polish. Strong engineering needs unhurried, meticulous documentation.',
-  } as Highlight,
 }
 
 export const projects: ProjectItem[] = [
   {
     id: 'luxcal',
-    title: 'Luxcal: Agentic Market Research for Ultra-Premium Brands',
+    title: 'Luxcal: Multi-Agent System for Market Research of Ultra-Premium Brands',
     category: 'MSc Dissertation · Multi-Agent',
     hook: 'Neuro-symbolic agents that turn luxury-market questions into competitive intelligence.',
     summary:
@@ -248,22 +302,25 @@ export const projects: ProjectItem[] = [
   },
   {
     id: 'credit-default',
-    title: 'Credit Default Prediction',
-    category: 'MSc Project · Deep Neural Network',
-    hook: 'A PyTorch network predicting consumer-loan default.',
-    summary: 'A PyTorch deep neural network for consumer-loan default, trained on 41,298 observations.',
-    impact: '~70% held-out accuracy.',
-    stack: ['PyTorch', 'Deep Learning', 'pandas'],
+    title: 'Credit Risk: A/B Testing, Segmentation & Default Prediction',
+    category: 'MSc Project · Credit Risk Analytics',
+    hook: 'Tested loan policies, segmented borrowers and predicted default on LendingClub data.',
+    summary:
+      'Three studies on LendingClub loans. An A/B test of two rule-based approval policies (50,000 loans, default rate as the key metric). Borrower segmentation with hierarchical clustering and K-Means into three risk groups. A four-layer PyTorch network predicting default, with class weighting for a 5:1 imbalance.',
+    impact: 'Uncovered two distinct kinds of default risk, current financial strain and past credit problems, that no single-threshold rule can catch. The network reached ~70% held-out accuracy.',
+    stack: ['A/B Testing', 'Clustering', 'PyTorch', 'Python'],
     linkNote: 'Code coming to GitHub', // TODO: add repo link
   },
   {
     id: 'tube-heating',
     title: 'Statistical Analysis of the London Tube Heating System',
     category: 'MSc Project · Statistics',
-    hook: 'Putting numbers on heat in the London Underground, in R.',
-    summary: 'Statistical analysis of heat on the London Underground, built in R and RStudio.',
+    hook: 'Which Tube lines run hottest, and where should cooling go first?',
+    summary:
+      'Multi-year temperature trends across London Underground lines, backed by data-integrity checks and a two-sample t-test comparing the Bakerloo and Central lines.',
+    impact: 'Pinpointed the lines most affected by heat, giving policy makers clear priorities for rolling out air-cooling.',
     stack: ['R', 'RStudio', 'Statistical Testing'],
-    linkNote: 'Code coming to GitHub', // TODO: add repo link + one-line result
+    linkNote: 'Code coming to GitHub', // TODO: add repo link
   },
   {
     id: 'pyomo-optimisation',
@@ -284,10 +341,10 @@ export const clientProjects: ClientProject[] = [
     id: 'gofundme',
     client: 'GoFundMe',
     title: 'Predictive Early-Intervention Model',
-    hook: 'Flag at-risk accounts before they churn.',
-    summary: 'End-to-end model (cleansing, feature engineering, build, deployment) flagging accounts for the Customer Success team to reach early.',
+    hook: 'Spot campaigns that can still hit their goal, so the team can step in.',
+    summary: 'End-to-end model (cleansing, feature engineering, build, deployment) flagging campaigns with the potential to reach their goal, so the Customer Success team could intervene and help them get there.',
     impact: '~15% Customer Success efficiency lift in the first month after deployment.',
-    stack: ['Python', 'Predictive Modelling', 'Deployment'],
+    stack: ['EDA', 'Descriptive Analysis', 'Statistical Testing', 'ML Modelling', 'Deployment'],
   },
   {
     id: 'walmart',
@@ -296,7 +353,7 @@ export const clientProjects: ClientProject[] = [
     hook: 'One measurement view across every retail-media channel.',
     summary: 'Turned ambiguous objectives from commercial leadership into a measurement framework spanning market and revenue analysis.',
     impact: 'Contributed to $2.78B in consumer impact; analysis informed ~25% revenue growth across the account.',
-    stack: ['SQL', 'Python', 'Measurement'],
+    stack: ['EDA', 'Prescriptive Analysis', 'Clustering', 'SQL', 'Python'],
   },
   {
     id: 'redbox',
@@ -304,7 +361,7 @@ export const clientProjects: ClientProject[] = [
     title: 'A/B Testing for Promotion Offers',
     hook: 'Which promotions actually move rentals?',
     summary: 'Designed and ran A/B tests to measure how promotional offers performed, with test durations set by power analysis.',
-    stack: ['A/B Testing', 'Power Analysis', 'Python'],
+    stack: ['Measurement Frameworks', 'A/B Testing', 'Power Analysis', 'Python'],
   },
   {
     id: 'bestbuy',

@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import { hireMeHref, profile } from '~/data/portfolio'
 import { Icon } from './Icon'
+import { CvMenu } from './CvMenu'
 import { MorphPill } from './MorphPill'
 
 const clients = ['MathCo', 'Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe', 'Warwick']
@@ -33,9 +34,7 @@ export function Hero() {
             <MorphPill href="#work" variant="outline">
               My Work
             </MorphPill>
-            <MorphPill href={profile.cvUrl} variant="soft" icon="download" download>
-              Download CV
-            </MorphPill>
+            <CvMenu />
           </div>
 
           <div className="mt-12">
@@ -110,8 +109,24 @@ export function Hero() {
           </motion.div>
 
           <motion.div
+            {...float(1.8)}
+            className="card absolute -left-4 top-[60%] hidden w-52 p-4 sm:block lg:left-0"
+          >
+            <p className="flex items-center gap-2 text-xs font-semibold text-accent">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft">
+                <Icon name="code" size={13} stroke={2.5} />
+              </span>
+              Why AI
+            </p>
+            <p className="mt-2 text-sm font-extrabold leading-snug tracking-tight">Backend alone wasn’t my scene.</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
+              So I moved into AI. It gives me room to go beyond development, measure impact and give the business real reasoning.
+            </p>
+          </motion.div>
+
+          <motion.div
             {...float(2.4)}
-            className="card absolute -bottom-6 left-6 hidden items-center gap-3 p-3 pr-5 sm:flex"
+            className="card absolute -right-4 top-6 hidden items-center gap-3 p-3 pr-5 sm:flex lg:-right-8"
             aria-hidden
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-peach-soft text-peach">

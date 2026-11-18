@@ -1,6 +1,6 @@
 import { useId, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { dissertationReview, journey, type Highlight, type JourneyMilestone } from '~/data/portfolio'
+import { dissertationGlance, journey, type Highlight, type JourneyMilestone } from '~/data/portfolio'
 import { Icon } from './Icon'
 import { SectionHeading } from './SectionHeading'
 
@@ -23,8 +23,8 @@ export function LearningJourney() {
   return (
     <section id="journey" aria-labelledby="journey-title" className="pb-8 pt-20 sm:pb-12 sm:pt-28">
       <div className="container-grid">
-        <SectionHeading index="01" label="Journey" id="journey-title" title="The data-learning journey.">
-          Five steps, one direction. Tap any step to open it.
+        <SectionHeading index="01" label="Journey" id="journey-title" title="How I grew into AI.">
+          The story behind my leap from software to applied AI.
         </SectionHeading>
 
         <div className="relative mt-14">
@@ -231,7 +231,7 @@ function Chips({ m }: { m: JourneyMilestone }) {
       ) : null}
       <ul className={`${m.chipsLabel ? 'mt-1.5' : 'mt-3'} flex flex-wrap gap-1.5`}>
         {m.chips.map((c) => (
-          <li key={c} className="tag">
+          <li key={c} className="tag !px-2 !text-[0.625rem]">
             {c}
           </li>
         ))}
@@ -257,21 +257,100 @@ function Bullets({ items }: { items: Highlight[] }) {
   )
 }
 
+function Path({ m, color }: { m: JourneyMilestone; color: string }) {
+  if (!m.path?.length) return null
+  return (
+    <div className="mt-4">
+      {m.pathLabel ? <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">{m.pathLabel}</p> : null}
+      <ol className="mt-2 flex flex-wrap items-center gap-y-2">
+        {m.path.map((p, i) => {
+          const last = i === m.path!.length - 1
+          return (
+            <motion.li
+              key={p}
+              className="flex items-center"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 * i, duration: 0.25 }}
+            >
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-bold ${last ? 'text-white shadow-[var(--shadow-glow)]' : 'border border-line bg-white text-ink-soft'}`}
+                style={last ? { background: 'var(--gradient-cta)' } : undefined}
+              >
+                {p}
+              </span>
+              {!last ? (
+                <span className="mx-1.5 text-sm font-bold" style={{ color }} aria-hidden>
+                  →
+                </span>
+              ) : null}
+            </motion.li>
+          )
+        })}
+      </ol>
+    </div>
+  )
+}
+
+function Groups({ m, color }: { m: JourneyMilestone; color: string }) {
+  if (!m.groups?.length) return null
+  return (
+    <div className="grid gap-4 xl:grid-cols-2">
+      {m.groups.map((g) => (
+        <div key={g.label} className="rounded-2xl border border-line bg-paper/60 p-4">
+          <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.12em]" style={{ color }}>
+            {g.label}
+          </p>
+          <Bullets items={g.items} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Callout({ m }: { m: JourneyMilestone }) {
+  if (!m.callout) return null
+  return (
+    <div className="mt-4 flex items-start gap-3 rounded-2xl p-4 [background:linear-gradient(100deg,#efebff,#fde8f4)]">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-sm" aria-hidden>
+        ★
+      </span>
+      <p className="text-sm leading-relaxed text-ink-soft">
+        <strong className="font-semibold text-ink">{m.callout.lead}</strong> {m.callout.text}
+      </p>
+    </div>
+  )
+}
+
 function DetailBody({ m }: { m: JourneyMilestone }) {
   const isMsc = m.step === journey[LAST].step
-  const [tab, setTab] = useState<'milestones' | 'review'>('milestones')
+  const color = STEP_COLORS[journey.indexOf(m)] ?? STEP_COLORS[0]
+  const [tab, setTab] = useState<'milestones' | 'glance'>('milestones')
   const uid = useId()
 
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">{m.organization}</p>
 
+      {m.brands?.length ? (
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 text-[0.6875rem] font-bold uppercase tracking-[0.12em]" style={{ color }}>
+            Global brands
+          </span>
+          {m.brands.map((b) => (
+            <span key={b} className="tag">
+              {b}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
       {isMsc ? (
         <div role="tablist" aria-label="MSc details" className="mt-4 inline-flex flex-wrap gap-1 rounded-full bg-paper p-1">
           {(
             [
               ['milestones', 'MSc Milestones & Leadership'],
-              ['review', dissertationReview.tab],
+              ['glance', dissertationGlance.tab],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -296,43 +375,201 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
         </div>
       ) : null}
 
+      <Path m={m} color={color} />
+
       <div className="mt-4" role={isMsc ? 'tabpanel' : undefined}>
-        {isMsc && tab === 'review' ? (
-          <Review />
+        {isMsc && tab === 'glance' ? (
+          <Glance />
+        ) : m.groups?.length ? (
+          <Groups m={m} color={color} />
         ) : m.highlights?.length ? (
           <Bullets items={m.highlights} />
         ) : null}
+      </div>
+
+      <Callout m={m} />
+    </div>
+  )
+}
+
+const PIPELINE: { label: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
+  { label: 'Read the brand', icon: 'profile' },
+  { label: 'Calibrate & gate', icon: 'gauge' },
+  { label: 'Ideate', icon: 'bulb' },
+  { label: 'Critique', icon: 'shield' },
+]
+
+const PROFILE = [0.82, 0.64, 0.9, 0.48, 0.72]
+
+function Meter({ label, level, tone }: { label: string; level: 1 | 2 | 3; tone: string }) {
+  const names = ['Low', 'Medium', 'High']
+  return (
+    <div>
+      <div className="flex items-center justify-between text-[0.625rem] font-bold">
+        <span className="text-ink">{label}</span>
+        <span style={{ color: tone }}>{names[level - 1]}</span>
+      </div>
+      <div className="mt-1 grid grid-cols-3 gap-1">
+        {[1, 2, 3].map((n) => (
+          <motion.span
+            key={n}
+            className="h-1.5 rounded-full"
+            initial={{ backgroundColor: '#ebe9f3' }}
+            animate={{ backgroundColor: n <= level ? tone : '#ebe9f3' }}
+            transition={{ delay: 0.9 + n * 0.12, duration: 0.3 }}
+          />
+        ))}
       </div>
     </div>
   )
 }
 
-function Review() {
-  const r = dissertationReview
+/** Faux product screen giving a concept overview of Luxcal, without exposing its internals. */
+function Glance() {
+  const g = dissertationGlance
   return (
     <div>
-      <p className="text-xl font-extrabold tracking-tight">{r.title}</p>
+      <p className="text-xl font-extrabold tracking-tight">{g.title}</p>
       <ul className="mt-2 flex flex-wrap gap-1.5">
-        {r.stats.map((s) => (
+        {g.stats.map((s) => (
           <li key={s} className="tag tabular-nums">
             {s}
           </li>
         ))}
       </ul>
-      <div className="mt-5 grid gap-5 xl:grid-cols-2">
-        <div>
-          <p className="eyebrow !bg-mint-soft !text-mint">What worked</p>
-          <div className="mt-3">
-            <Bullets items={r.worked} />
+
+      <figure className="mt-5 overflow-hidden rounded-2xl border border-line bg-paper shadow-[var(--shadow-soft)]">
+        {/* Window chrome */}
+        <div className="flex items-center gap-2 border-b border-line bg-white px-4 py-2.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-pink/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-peach/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-mint/70" />
+          <span className="ml-3 truncate rounded-full bg-paper px-3 py-0.5 text-[0.625rem] font-semibold text-muted">luxcal · brand AI calibration</span>
+          <span className="ml-auto rounded-full bg-accent-soft px-2 py-0.5 text-[0.5625rem] font-bold text-accent">Concept preview</span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <div className="grid min-w-[600px] grid-cols-[0.9fr_1.1fr] gap-3 p-4">
+            {/* Left: input + run status */}
+            <div className="space-y-3">
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="flex items-center gap-1.5 text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">
+                  <Icon name="doc" size={11} stroke={2.25} /> Brand brief
+                </p>
+                <div className="mt-2 space-y-1.5" aria-hidden>
+                  {['w-full', 'w-11/12', 'w-4/5', 'w-2/3'].map((w) => (
+                    <span key={w} className={`block h-1.5 rounded-full bg-paper ${w}`} />
+                  ))}
+                </div>
+                <p className="mt-2 text-[0.625rem] italic leading-snug text-ink-soft">“A heritage maison whose clients value discretion and craft…”</p>
+                <motion.span
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.625rem] font-bold text-white"
+                  style={{ background: 'var(--gradient-cta)' }}
+                  whileHover={{ scale: 1.04 }}
+                >
+                  <Icon name="spark" size={10} stroke={2.5} /> Calibrate
+                </motion.span>
+              </div>
+
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Agents at work</p>
+                <ol className="mt-2 space-y-1.5">
+                  {PIPELINE.map((st, n) => (
+                    <motion.li
+                      key={st.label}
+                      className="flex items-center gap-2 text-[0.6875rem] font-semibold text-ink"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 + n * 0.15 }}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-accent-soft text-accent">
+                        <Icon name={st.icon} size={11} stroke={2.25} />
+                      </span>
+                      {st.label}
+                      <motion.span
+                        className="ml-auto flex h-4 w-4 items-center justify-center rounded-full bg-mint text-[0.5rem] text-white"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.35 + n * 0.15, type: 'spring', stiffness: 400, damping: 18 }}
+                        aria-label="done"
+                      >
+                        ✓
+                      </motion.span>
+                    </motion.li>
+                  ))}
+                </ol>
+                <p className="mt-2.5 flex items-center gap-1.5 text-[0.5625rem] font-semibold text-pink">
+                  <Icon name="loop" size={10} stroke={2.5} /> Self-checks and revises before answering
+                </p>
+              </div>
+            </div>
+
+            {/* Right: results */}
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <div className="flex-1 rounded-xl border border-line bg-white p-3">
+                  <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Brand profile</p>
+                  <div className="mt-2 flex h-14 items-end gap-1.5" aria-hidden>
+                    {PROFILE.map((v, n) => (
+                      <motion.span
+                        key={n}
+                        className="flex-1 rounded-t-md"
+                        style={{ background: 'var(--gradient-cta)', opacity: 0.35 + v * 0.6 }}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${v * 100}%` }}
+                        transition={{ delay: 0.4 + n * 0.08, duration: 0.5, ease: 'easeOut' }}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-1.5 text-[0.5625rem] text-muted">Five luxury dimensions</p>
+                </div>
+                <div className="w-[42%] rounded-xl border border-line bg-white p-3">
+                  <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Gate</p>
+                  <motion.p
+                    className="mt-2 inline-flex items-center gap-1 rounded-full bg-mint-soft px-2 py-1 text-[0.625rem] font-extrabold text-mint"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.8 }}
+                  >
+                    ● AI fits this brand
+                  </motion.p>
+                  <p className="mt-2 text-[0.5625rem] leading-snug text-muted">Says no, with reasons, when it doesn’t.</p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Calibration</p>
+                <div className="mt-2 grid grid-cols-2 gap-4">
+                  <Meter label="AI visibility" level={1} tone="#12B886" />
+                  <Meter label="Personal intensity" level={2} tone="#F59F0B" />
+                </div>
+              </div>
+
+              <motion.div
+                className="rounded-xl bg-night p-3 text-white"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+              >
+                <p className="flex items-center gap-1.5 text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-white/60">
+                  <Icon name="target" size={11} stroke={2.25} /> Output
+                </p>
+                <p className="mt-1 text-[0.8125rem] font-extrabold leading-snug">Where and how to calibrate AI for this brand brief</p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[0.5625rem] leading-snug">
+                  <p className="rounded-lg bg-white/10 p-2">
+                    <span className="block font-bold text-white">Where</span>
+                    <span className="text-white/70">The touchpoint where AI adds value</span>
+                  </p>
+                  <p className="rounded-lg bg-white/10 p-2">
+                    <span className="block font-bold text-white">How</span>
+                    <span className="text-white/70">A concept kept inside the calibrated limits</span>
+                  </p>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
-        <div className="rounded-2xl bg-pink-soft/60 p-5">
-          <p className="eyebrow !bg-white !text-pink">The candid takeaway</p>
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-            <strong className="font-semibold text-ink">{r.takeaway.lead}</strong> {r.takeaway.text}
-          </p>
-        </div>
-      </div>
+      </figure>
     </div>
   )
 }

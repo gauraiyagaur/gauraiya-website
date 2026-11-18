@@ -6,7 +6,7 @@ const links = [
   { label: 'Email', href: `mailto:${profile.email}`, text: profile.email },
   { label: 'LinkedIn', href: profile.linkedin, text: 'Gauraiya Gaur' },
   { label: 'GitHub', href: profile.github, text: 'gauraiyagaur' },
-  { label: 'CV', href: profile.cvUrl, text: 'Download PDF', download: true },
+  ...profile.cvs.map((cv) => ({ label: `${cv.label} CV`, href: cv.url, text: cv.url ? 'Download PDF' : 'Coming soon', download: true })),
 ]
 
 export function Footer() {
@@ -30,9 +30,15 @@ export function Footer() {
             <ul className="space-y-2 lg:col-span-5">
               {links.map((l) => (
                 <li key={l.label}>
+                  {!l.href ? (
+                    <span className="flex items-center justify-between gap-4 rounded-2xl bg-white/50 px-5 py-4" aria-disabled>
+                      <span className="text-sm font-bold text-ink/60">{l.label}</span>
+                      <span className="text-sm text-muted">{l.text}</span>
+                    </span>
+                  ) : (
                   <a
                     href={l.href}
-                    {...(l.download ? { download: true } : {})}
+                    {...('download' in l && l.download ? { download: true } : {})}
                     className="group flex items-center justify-between gap-4 rounded-2xl bg-white/80 px-5 py-4 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:bg-white"
                   >
                     <span className="text-sm font-bold">{l.label}</span>
@@ -41,6 +47,7 @@ export function Footer() {
                       <Icon name="arrow" size={14} stroke={2.5} />
                     </span>
                   </a>
+                  )}
                 </li>
               ))}
             </ul>
