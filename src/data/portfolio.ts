@@ -221,8 +221,8 @@ export const journey: JourneyMilestone[] = [
         items: [
           { lead: 'Hit a ceiling.', text: 'My toolkit capped my impact. With NLP and neural networks, I could have given GoFundMe exactly what they needed.' },
           { lead: 'Bet on depth.', text: 'Left full-time consulting and moved to the UK for deeper technical rigour.' },
-          { lead: 'Biggest learning.', text: 'Scoping the rigour a problem demands, then solving it with neural networks, optimisation and forecasting.' },
-          { lead: 'Frontier focus.', text: 'LLMs, multi-agent orchestration and neuro-symbolic AI.' },
+          { lead: 'Biggest learning.', text: 'Reading what a problem truly needs, then reaching for the right tool to solve it.' },
+          { lead: 'Frontier focus.', text: 'Neural networks, optimisation, forecasting, LLMs, multi-agent orchestration and neuro-symbolic AI.' },
         ],
       },
       {
