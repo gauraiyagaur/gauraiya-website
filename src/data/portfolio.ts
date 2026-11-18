@@ -242,8 +242,6 @@ export const journey: JourneyMilestone[] = [
     organization: 'MSc Business Analytics & AI, University of Warwick',
     period: '2026',
     summary: 'Earned Distinction in four core modules, leading group projects along the way.',
-    chipsLabel: 'Distinction in',
-    chips: ['Optimisation', 'Generative AI', 'Forecasting', 'Analytics in Practice'],
     highlights: [
       { lead: 'Distinction in 4 modules.', text: 'Optimisation, Generative AI, Forecasting and Analytics in Practice.' },
       { lead: 'Led from the front.', text: 'Built leadership skills leading group projects; praised by peers and professors for technical and communication skills.' },
