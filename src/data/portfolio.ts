@@ -150,7 +150,7 @@ export const journey: JourneyMilestone[] = [
           { lead: 'Came in for code.', text: 'Entered university sure that software development was my calling.' },
           { lead: 'Tried everything.', text: 'Software, hardware, data structures, computer networks. Learnt the basics of it all, yet still felt unsatisfied.' },
           { lead: 'A lucky conversation.', text: 'Joined ACM with friends to learn Python, picked Data Science as an elective, and got hooked on the world of AI.' },
-          { lead: 'Grounded.', text: 'Algorithms, data structures and software engineering principles. CGPA 8/10.' },
+          { lead: 'Grounded.', text: 'Built a solid base in algorithms, data structures and software engineering, the foundation I still design AI systems on.' },
         ],
       },
       {
