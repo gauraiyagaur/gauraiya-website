@@ -392,24 +392,62 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
   )
 }
 
-type NodeKind = 'llm' | 'rule' | 'end'
+type NodeKind = 'llm' | 'rule' | 'end' | 'stop'
 
 const NODE_STYLE: Record<NodeKind, string> = {
   llm: 'border-accent/25 bg-accent-soft/70',
   rule: 'border-line bg-white',
+  stop: 'border-pink/25 bg-pink-soft/60',
   end: 'border-transparent bg-night text-white',
 }
 
-function FlowNode({ kind, title, sub, delay = 0 }: { kind: NodeKind; title: string; sub?: string; delay?: number }) {
+const ICON_STYLE: Record<NodeKind, string> = {
+  llm: 'bg-white text-accent',
+  rule: 'bg-paper text-ink-soft',
+  stop: 'bg-white text-pink',
+  end: 'bg-white/10 text-white',
+}
+
+type FlowIconName = Parameters<typeof Icon>[0]['name']
+
+function FlowNode({
+  kind,
+  icon,
+  tag,
+  title,
+  lines,
+  delay = 0,
+}: {
+  kind: NodeKind
+  icon: FlowIconName
+  tag?: string
+  title: string
+  lines?: string[]
+  delay?: number
+}) {
+  const dark = kind === 'end'
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.3 }}
-      className={`rounded-xl border px-3 py-2.5 ${NODE_STYLE[kind]}`}
+      whileHover={{ y: -2 }}
+      className={`h-full rounded-xl border px-2.5 py-2 ${NODE_STYLE[kind]}`}
     >
-      <p className={`text-[0.6875rem] font-extrabold leading-tight ${kind === 'end' ? 'text-white' : 'text-ink'}`}>{title}</p>
-      {sub ? <p className={`mt-0.5 text-[0.625rem] leading-snug ${kind === 'end' ? 'text-white/60' : 'text-muted'}`}>{sub}</p> : null}
+      <div className="flex items-center gap-1.5">
+        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${ICON_STYLE[kind]}`}>
+          <Icon name={icon} size={12} stroke={2.25} />
+        </span>
+        {tag ? (
+          <span className={`text-[0.5rem] font-extrabold uppercase tracking-[0.12em] ${dark ? 'text-white/60' : 'text-muted'}`}>{tag}</span>
+        ) : null}
+      </div>
+      <p className={`mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight ${dark ? 'text-white' : 'text-ink'}`}>{title}</p>
+      {lines?.map((l) => (
+        <p key={l} className={`mt-0.5 text-[0.5625rem] leading-snug ${dark ? 'text-white/70' : 'text-muted'}`}>
+          {l}
+        </p>
+      ))}
     </motion.div>
   )
 }
@@ -420,19 +458,22 @@ function Gate({ label, delay = 0 }: { label: string; delay?: number }) {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay, duration: 0.3 }}
-      className="flex h-14 w-14 shrink-0 items-center justify-center"
+      className="flex h-16 w-16 shrink-0 items-center justify-center"
     >
-      <div className="flex h-10 w-10 rotate-45 items-center justify-center rounded-lg border border-sky/40 bg-sky-soft">
-        <span className="-rotate-45 text-[0.5625rem] font-extrabold text-sky">{label}</span>
+      <div className="flex h-11 w-11 rotate-45 items-center justify-center rounded-lg border border-sky/40 bg-sky-soft">
+        <span className="-rotate-45 text-[0.5rem] font-extrabold uppercase text-sky">{label}</span>
       </div>
     </motion.div>
   )
 }
 
-const Arrow = ({ label, down = false }: { label?: string; down?: boolean }) => (
-  <div className={`flex shrink-0 items-center justify-center text-muted ${down ? 'flex-col py-1' : 'px-1'}`} aria-hidden>
-    {label ? <span className="text-[0.5625rem] font-bold uppercase tracking-wide">{label}</span> : null}
-    <span className="text-xs leading-none">{down ? '↓' : '→'}</span>
+const Arrow = ({ label, dir = 'right', tone = 'muted' }: { label?: string; dir?: 'right' | 'left' | 'down'; tone?: 'muted' | 'pink' }) => (
+  <div
+    className={`flex shrink-0 items-center justify-center ${tone === 'pink' ? 'text-pink' : 'text-muted'} ${dir === 'down' ? 'flex-col py-0.5' : 'flex-col px-1'}`}
+    aria-hidden
+  >
+    {label ? <span className="text-[0.5rem] font-extrabold uppercase tracking-wide">{label}</span> : null}
+    <span className="text-xs leading-none">{dir === 'down' ? '↓' : dir === 'left' ? '←' : '→'}</span>
   </div>
 )
 
@@ -462,59 +503,82 @@ function Glance() {
         </div>
 
         <div className="overflow-x-auto">
-        <div className="min-w-[600px] space-y-3 p-4">
-          {/* Row 1: brief to gate */}
-          <div className="flex items-center">
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="rule" title="Brand brief" sub="Free-text input" />
+          <div className="min-w-[640px] p-4">
+            {/* Row 1: brief → profiler → calibration → gate → refusal */}
+            <div className="flex items-stretch">
+              <div className="w-[17%]">
+                <FlowNode kind="rule" icon="doc" tag="Input" title="Brand brief" lines={['Free text from the user']} />
+              </div>
+              <Arrow />
+              <div className="w-[19%]">
+                <FlowNode kind="llm" icon="profile" tag="Agent 1" title="Brand Profiler" lines={['Five-dimension brand profile']} delay={0.08} />
+              </div>
+              <Arrow />
+              <div className="w-[21%]">
+                <FlowNode kind="llm" icon="gauge" tag="Agent 2" title="Calibration & Gate" lines={['Rules score each axis', 'Sets the gate decision']} delay={0.16} />
+              </div>
+              <Arrow />
+              <div className="flex items-center">
+                <Gate label="Go?" delay={0.24} />
+              </div>
+              <Arrow label="No" tone="pink" />
+              <div className="flex-1">
+                <FlowNode kind="stop" icon="ban" tag="Terminal" title="Reasoned refusal" lines={['Says no, with a written why']} delay={0.3} />
+              </div>
             </div>
-            <Arrow />
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="llm" title="Agent 1 · Brand Profiler" sub="Builds the brand profile" delay={0.08} />
-            </div>
-            <Arrow />
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="llm" title="Agent 2 · Calibration & Gate" sub="Scores the brand, sets the gate" delay={0.16} />
-            </div>
-            <Arrow />
-            <Gate label="Proceed?" delay={0.24} />
-            <Arrow label="No" />
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="rule" title="Reasoned refusal" sub="Says no, with a why" delay={0.3} />
-            </div>
-          </div>
 
-          <div className="flex justify-end pr-[25.5%]">
-            <Arrow label="Yes" down />
-          </div>
+            {/* Yes branch drops from the gate */}
+            <div className="relative h-8">
+              <div className="absolute top-0.5 -translate-x-1/2" style={{ left: 'var(--gate-x, 70%)' }}>
+                <Arrow label="Yes" dir="down" />
+              </div>
+            </div>
 
-          {/* Row 2: ideation loop to end */}
-          <div className="flex items-center">
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="end" title="END" sub="Calibrated ideas out" delay={0.6} />
+            {/* Row 2 (right to left): ideation → critic → verdict → output */}
+            <div className="flex items-stretch">
+              <div className="flex-1">
+                <FlowNode
+                  kind="end"
+                  icon="target"
+                  tag="Output"
+                  title="Calibrated AI plan"
+                  lines={['Where and how to calibrate AI for a brand brief']}
+                  delay={0.62}
+                />
+              </div>
+              <Arrow label="Pass" dir="left" />
+              <div className="flex items-center">
+                <Gate label="Verdict" delay={0.54} />
+              </div>
+              <Arrow dir="left" />
+              <div className="w-[21%]">
+                <FlowNode kind="llm" icon="shield" tag="Critic" title="Two-check review" lines={['Brand and axes respected?', 'Concept fits the brief?']} delay={0.46} />
+              </div>
+              <Arrow dir="left" />
+              <div className="relative w-[22%]">
+                <FlowNode kind="llm" icon="bulb" tag="Agent 3" title="Ideation" lines={['Ideas inside the calibrated bands']} delay={0.38} />
+              </div>
+              <div className="flex w-[19%] items-center justify-center">
+                <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-1 text-[0.5rem] font-extrabold uppercase text-pink">
+                  <Icon name="loop" size={9} stroke={2.5} /> Revise: back to Agent 3
+                </span>
+              </div>
             </div>
-            <Arrow label="Pass" />
-            <Gate label="Verdict" delay={0.5} />
-            <Arrow />
-            <div className="min-w-0 flex-1">
-              <FlowNode kind="llm" title="Critic" sub="Pass, revise or escalate" delay={0.42} />
-            </div>
-            <Arrow />
-            <div className="relative min-w-0 flex-1">
-              <FlowNode kind="llm" title="Agent 3 · Ideation" sub="Ideas within the calibration" delay={0.36} />
-              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-pink-soft px-2 py-0.5 text-[0.5625rem] font-bold text-pink">
-                ↺ Revise loop
-              </span>
-            </div>
-          </div>
 
-          {/* Row 3: support */}
-          <div className="grid grid-cols-3 gap-3 border-t border-dashed border-line pt-3">
-            <FlowNode kind="rule" title="Human review" sub="Escalated cases" delay={0.66} />
-            <FlowNode kind="rule" title="Shared state" sub="LangGraph memory" delay={0.7} />
-            <FlowNode kind="rule" title="Two calibrated axes" sub="Low, medium, high bands" delay={0.74} />
+            {/* Escalate branch drops from the verdict */}
+            <div className="relative h-8">
+              <div className="absolute top-0.5 -translate-x-1/2" style={{ left: 'var(--verdict-x, 29%)' }}>
+                <Arrow label="Escalate" dir="down" />
+              </div>
+            </div>
+
+            {/* Row 3: supporting pieces */}
+            <div className="grid grid-cols-3 gap-3">
+              <FlowNode kind="rule" icon="eye" tag="Safety net" title="Human review" lines={['Escalated cases go to a person']} delay={0.7} />
+              <FlowNode kind="rule" icon="database" tag="LangGraph" title="Shared state" lines={['State passed between agents']} delay={0.74} />
+              <FlowNode kind="rule" icon="sliders" tag="Calibration" title="Two calibrated axes" lines={['Low, medium and high bands', 'Computed by Agent 2']} delay={0.78} />
+            </div>
           </div>
-        </div>
         </div>
 
         <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line bg-white px-4 py-2 text-[0.625rem] font-semibold text-muted">
@@ -527,7 +591,12 @@ function Glance() {
           <span className="inline-flex items-center gap-1.5">
             <span className="h-2 w-2 rotate-45 rounded-[2px] bg-sky-soft ring-1 ring-sky/40" /> Gate
           </span>
-          <span className="inline-flex items-center gap-1.5 text-pink">↺ Feedback loop</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-sm bg-pink-soft ring-1 ring-pink/30" /> Terminal
+          </span>
+          <span className="inline-flex items-center gap-1 text-pink">
+            <Icon name="loop" size={10} stroke={2.5} /> Feedback loop
+          </span>
         </figcaption>
       </figure>
     </div>
