@@ -39,6 +39,8 @@ export interface JourneyMilestone {
   pathLabel?: string
   /** Grouped details, shown side by side instead of `highlights`. */
   groups?: { label: string; items: Highlight[] }[]
+  /** Brand names shown under the organisation line in the opened details. */
+  brands?: string[]
   /** One standout line shown in a tinted box under the details. */
   callout?: Highlight
 }
@@ -197,6 +199,7 @@ export const journey: JourneyMilestone[] = [
     organization: 'Enterprise consulting & production delivery, Bangalore',
     period: '2022 – 2025',
     summary: 'Shipped ML for global brands. Analyst to lead measurement.',
+    brands: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
     highlights: [
       { lead: '~15% efficiency lift.', text: 'Early-intervention model for Campaign Success, deployed end to end, paid off in month one.' },
       { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },

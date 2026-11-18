@@ -332,6 +332,19 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">{m.organization}</p>
 
+      {m.brands?.length ? (
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 text-[0.6875rem] font-bold uppercase tracking-[0.12em]" style={{ color }}>
+            Global brands
+          </span>
+          {m.brands.map((b) => (
+            <span key={b} className="tag">
+              {b}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
       {isMsc ? (
         <div role="tablist" aria-label="MSc details" className="mt-4 inline-flex flex-wrap gap-1 rounded-full bg-paper p-1">
           {(
