@@ -149,18 +149,18 @@ export const journey: JourneyMilestone[] = [
       {
         label: 'In the classroom',
         items: [
-          { lead: 'Came in for code.', text: 'Entered university sure that software development was my calling.' },
-          { lead: 'Tried everything.', text: 'Software, hardware, data structures, computer networks. Learnt the basics of it all, yet still felt unsatisfied.' },
-          { lead: 'A lucky conversation.', text: 'Joined ACM with friends to learn Python, picked Data Science as an elective, and got hooked on the world of AI.' },
+          { lead: 'Came in for code.', text: 'Arrived certain that software development was my calling.' },
+          { lead: 'Tried everything.', text: 'Hardware, data structures, networks. Learnt plenty, still felt unfulfilled.' },
+          { lead: 'A lucky conversation.', text: 'Friends pulled me into ACM for Python, and a Data Science elective got me hooked on AI.' },
           { lead: 'Grounded.', text: 'Built a solid base in algorithms, data structures and software engineering, the foundation I still design AI systems on.' },
         ],
       },
       {
         label: 'Beyond the classroom',
         items: [
-          { lead: 'Music.', text: 'Followed my love for music alongside studies and won ensemble competitions.' },
-          { lead: 'Found my voice.', text: 'Volunteered to work on my personality and confidence.' },
-          { lead: 'Rose through the ranks.', text: 'Volunteer → Assistant Secretary General → Treasurer, spanning multiple clubs and fests.' },
+          { lead: 'Music.', text: 'Won ensemble competitions alongside my studies.' },
+          { lead: 'Found my voice.', text: 'Volunteering built my confidence and presence.' },
+          { lead: 'Rose through the ranks.', text: 'Volunteer → Assistant Secretary General → Treasurer, across clubs and fests.' },
         ],
       },
     ],
@@ -176,20 +176,20 @@ export const journey: JourneyMilestone[] = [
       {
         label: 'The project',
         items: [
-          { lead: 'First model.', text: 'Final-year project: machine-learning prediction of cardiovascular disease.' },
-          { lead: 'New mindset.', text: 'Shifted from deterministic rules to systems that learn patterns from real-world data.' },
+          { lead: 'First model.', text: 'Final-year project predicting cardiovascular disease with ML.' },
+          { lead: 'New mindset.', text: 'From hand-written rules to systems that learn from data.' },
         ],
       },
       {
         label: 'Challenges I cracked',
         items: [
-          { lead: 'Big data, first time.', text: 'Navigated large Kaggle datasets with NumPy and pandas for the very first time.' },
-          { lead: 'Learning to model.', text: 'A first-time learner of predictive modelling, figuring it out end to end.' },
-          { lead: 'Measuring what matters.', text: 'Ran my first model comparison and learnt the nuance between precision, recall, accuracy and F1.' },
+          { lead: 'Big data, first time.', text: 'Large Kaggle datasets, tamed with NumPy and pandas.' },
+          { lead: 'Learning to model.', text: 'Predictive modelling, learnt from scratch, end to end.' },
+          { lead: 'Measuring what matters.', text: 'My first model comparison, and the nuance of precision, recall, accuracy and F1.' },
         ],
       },
     ],
-    callout: { lead: 'The payoff.', text: 'This project landed my first job, as a Data Analyst at MathCo.' },
+    callout: { lead: 'The payoff.', text: 'This project landed my first job: Data Analyst at MathCo.' },
   },
   {
     step: '03',
@@ -219,23 +219,23 @@ export const journey: JourneyMilestone[] = [
       {
         label: 'Why I went',
         items: [
-          { lead: 'Hit a ceiling.', text: 'As a data scientist I could see where I could contribute more, but my knowledge held me back. For GoFundMe, knowing neural networks (NLP specifically) would have given them exactly what they wanted.' },
-          { lead: 'Bet on depth.', text: 'Stepped away from full-time consulting and moved to the UK to deepen technical rigour.' },
-          { lead: 'Biggest learning.', text: 'How to break down the analytical rigour a problem needs, plus neural networks, optimisation and forecasting models.' },
-          { lead: 'Frontier focus.', text: 'Large language models, multi-agent orchestration and neuro-symbolic AI architectures.' },
+          { lead: 'Hit a ceiling.', text: 'My toolkit capped my impact. With NLP and neural networks, I could have given GoFundMe exactly what they needed.' },
+          { lead: 'Bet on depth.', text: 'Left full-time consulting and moved to the UK for deeper technical rigour.' },
+          { lead: 'Biggest learning.', text: 'Scoping the rigour a problem demands, then solving it with neural networks, optimisation and forecasting.' },
+          { lead: 'Frontier focus.', text: 'LLMs, multi-agent orchestration and neuro-symbolic AI.' },
         ],
       },
       {
         label: 'Who I became',
         items: [
-          { lead: 'All in.', text: 'Of every academic phase, Warwick is where I devoted myself completely to learning.' },
-          { lead: 'Solo to team player.', text: 'I loved working by myself, but immense group work and an amazing cohort taught me to excel in teams and deliver more.' },
-          { lead: 'A global circle.', text: 'Made friends from every part of the world over shared interests in data, strategy, stats and finance.' },
-          { lead: 'Wider worldview.', text: 'Stepping outside India gave me confidence and a view of where the world is headed with AI.' },
+          { lead: 'All in.', text: 'Warwick is where I committed fully to learning.' },
+          { lead: 'Solo to team player.', text: 'A natural solo worker who learnt to thrive, and deliver more, in a brilliant cohort.' },
+          { lead: 'A global circle.', text: 'Friends from across the world, bonded over data, strategy, stats and finance.' },
+          { lead: 'Wider worldview.', text: 'Life beyond India sharpened my confidence and my view of where AI is heading.' },
         ],
       },
     ],
-    callout: { lead: 'Gillmore Centre.', text: 'Given the opportunity to work with the Gillmore Centre for Financial Technology.' },
+    callout: { lead: 'Gillmore Centre.', text: 'Worked with the Gillmore Centre for Financial Technology.' },
   },
   {
     step: '05',
