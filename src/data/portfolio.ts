@@ -197,8 +197,7 @@ export const journey: JourneyMilestone[] = [
     organization: 'Enterprise consulting & production delivery, Bangalore',
     period: '2022 – 2025',
     summary: 'Shipped ML for global brands. Analyst to lead measurement.',
-    chipsLabel: 'Fortune 500 & global brands',
-    chips: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
+    chips: ['Fortune 500', 'Global brands'],
     highlights: [
       { lead: '~15% efficiency lift.', text: 'Early-intervention model for Campaign Success, deployed end to end, paid off in month one.' },
       { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },
