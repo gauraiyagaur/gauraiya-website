@@ -266,7 +266,7 @@ export const dissertationGlance = {
 export const projects: ProjectItem[] = [
   {
     id: 'luxcal',
-    title: 'Luxcal: Agentic Market Research for Ultra-Premium Brands',
+    title: 'Luxcal: Multi-Agent System for Market Research of Ultra-Premium Brands',
     category: 'MSc Dissertation · Multi-Agent',
     hook: 'Neuro-symbolic agents that turn luxury-market questions into competitive intelligence.',
     summary:
@@ -302,22 +302,25 @@ export const projects: ProjectItem[] = [
   },
   {
     id: 'credit-default',
-    title: 'Credit Default Prediction',
-    category: 'MSc Project · Deep Neural Network',
-    hook: 'A PyTorch network predicting consumer-loan default.',
-    summary: 'A PyTorch deep neural network for consumer-loan default, trained on 41,298 observations.',
-    impact: '~70% held-out accuracy.',
-    stack: ['PyTorch', 'Deep Learning', 'pandas'],
+    title: 'Credit Risk: A/B Testing, Segmentation & Default Prediction',
+    category: 'MSc Project · Credit Risk Analytics',
+    hook: 'Tested loan policies, segmented borrowers and predicted default on LendingClub data.',
+    summary:
+      'Three studies on LendingClub loans. An A/B test of two rule-based approval policies (50,000 loans, default rate as the key metric). Borrower segmentation with hierarchical clustering and K-Means into three risk groups. A four-layer PyTorch network predicting default, with class weighting for a 5:1 imbalance.',
+    impact: 'Uncovered two distinct kinds of default risk, current financial strain and past credit problems, that no single-threshold rule can catch. The network reached ~70% held-out accuracy.',
+    stack: ['A/B Testing', 'Clustering', 'PyTorch', 'Python'],
     linkNote: 'Code coming to GitHub', // TODO: add repo link
   },
   {
     id: 'tube-heating',
     title: 'Statistical Analysis of the London Tube Heating System',
     category: 'MSc Project · Statistics',
-    hook: 'Putting numbers on heat in the London Underground, in R.',
-    summary: 'Statistical analysis of heat on the London Underground, built in R and RStudio.',
+    hook: 'Which Tube lines run hottest, and where should cooling go first?',
+    summary:
+      'Multi-year temperature trends across London Underground lines, backed by data-integrity checks and a two-sample t-test comparing the Bakerloo and Central lines.',
+    impact: 'Pinpointed the lines most affected by heat, giving policy makers clear priorities for rolling out air-cooling.',
     stack: ['R', 'RStudio', 'Statistical Testing'],
-    linkNote: 'Code coming to GitHub', // TODO: add repo link + one-line result
+    linkNote: 'Code coming to GitHub', // TODO: add repo link
   },
   {
     id: 'pyomo-optimisation',
@@ -338,10 +341,10 @@ export const clientProjects: ClientProject[] = [
     id: 'gofundme',
     client: 'GoFundMe',
     title: 'Predictive Early-Intervention Model',
-    hook: 'Flag at-risk accounts before they churn.',
-    summary: 'End-to-end model (cleansing, feature engineering, build, deployment) flagging accounts for the Customer Success team to reach early.',
+    hook: 'Spot campaigns that can still hit their goal, so the team can step in.',
+    summary: 'End-to-end model (cleansing, feature engineering, build, deployment) flagging campaigns with the potential to reach their goal, so the Customer Success team could intervene and help them get there.',
     impact: '~15% Customer Success efficiency lift in the first month after deployment.',
-    stack: ['Python', 'Predictive Modelling', 'Deployment'],
+    stack: ['EDA', 'Descriptive Analysis', 'Statistical Testing', 'ML Modelling', 'Deployment'],
   },
   {
     id: 'walmart',
@@ -350,7 +353,7 @@ export const clientProjects: ClientProject[] = [
     hook: 'One measurement view across every retail-media channel.',
     summary: 'Turned ambiguous objectives from commercial leadership into a measurement framework spanning market and revenue analysis.',
     impact: 'Contributed to $2.78B in consumer impact; analysis informed ~25% revenue growth across the account.',
-    stack: ['SQL', 'Python', 'Measurement'],
+    stack: ['EDA', 'Prescriptive Analysis', 'Clustering', 'SQL', 'Python'],
   },
   {
     id: 'redbox',
@@ -358,7 +361,7 @@ export const clientProjects: ClientProject[] = [
     title: 'A/B Testing for Promotion Offers',
     hook: 'Which promotions actually move rentals?',
     summary: 'Designed and ran A/B tests to measure how promotional offers performed, with test durations set by power analysis.',
-    stack: ['A/B Testing', 'Power Analysis', 'Python'],
+    stack: ['Measurement Frameworks', 'A/B Testing', 'Power Analysis', 'Python'],
   },
   {
     id: 'bestbuy',
