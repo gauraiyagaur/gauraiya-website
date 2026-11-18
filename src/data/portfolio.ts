@@ -212,7 +212,7 @@ export const journey: JourneyMilestone[] = [
     title: 'Off to Warwick',
     organization: 'MSc Business Analytics & AI, Warwick Business School',
     period: '2025 – 2026',
-    summary: 'Left consulting for the frontier: LLMs, multi-agent and neuro-symbolic AI.',
+    summary: 'Left consulting for the frontier: advanced data analytics, neural networks, LLMs, agentic AI and RAG.',
     groups: [
       {
         label: 'Why I went',
