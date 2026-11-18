@@ -126,7 +126,7 @@ export function Hero() {
 
           <motion.div
             {...float(2.4)}
-            className="card absolute -bottom-6 left-6 hidden items-center gap-3 p-3 pr-5 sm:flex"
+            className="card absolute -right-4 top-6 hidden items-center gap-3 p-3 pr-5 sm:flex lg:-right-8"
             aria-hidden
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-peach-soft text-peach">
