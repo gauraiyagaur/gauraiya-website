@@ -7,7 +7,9 @@ function CountUp({ value }: { value: string }) {
   const match = value.match(/^(\d+(?:\.\d+)?)(.*)$/)
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.6 })
-  const [shown, setShown] = useState(value)
+  const num = match ? match[1] : value
+  const suffix = match ? match[2] : ''
+  const [shown, setShown] = useState(num)
 
   useEffect(() => {
     if (!match || !inView) return
@@ -16,7 +18,7 @@ function CountUp({ value }: { value: string }) {
     const controls = animate(0, target, {
       duration: 1.2,
       ease: [0.2, 0.8, 0.2, 1],
-      onUpdate: (v) => setShown(v.toFixed(decimals) + match[2]),
+      onUpdate: (v) => setShown(v.toFixed(decimals)),
     })
     return () => controls.stop()
   }, [inView])
@@ -24,6 +26,8 @@ function CountUp({ value }: { value: string }) {
   return (
     <span ref={ref} className="tabular-nums">
       {shown}
+      {/* A worded unit like " yrs" sits smaller beside the number; symbols like "+" stay full size. */}
+      {/^\s/.test(suffix) ? <span className="ml-1.5 text-2xl font-bold text-white/80 sm:text-3xl">{suffix.trim()}</span> : suffix}
     </span>
   )
 }

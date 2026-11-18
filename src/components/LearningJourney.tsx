@@ -1,6 +1,6 @@
 import { useId, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { dissertationReview, journey, type Highlight, type JourneyMilestone } from '~/data/portfolio'
+import { dissertationGlance, journey, type Highlight, type JourneyMilestone } from '~/data/portfolio'
 import { Icon } from './Icon'
 import { SectionHeading } from './SectionHeading'
 
@@ -23,8 +23,8 @@ export function LearningJourney() {
   return (
     <section id="journey" aria-labelledby="journey-title" className="pb-8 pt-20 sm:pb-12 sm:pt-28">
       <div className="container-grid">
-        <SectionHeading index="01" label="Journey" id="journey-title" title="The data-learning journey.">
-          Five steps, one direction. Tap any step to open it.
+        <SectionHeading index="01" label="Journey" id="journey-title" title="How I grew into AI.">
+          The story behind my leap from software to applied AI.
         </SectionHeading>
 
         <div className="relative mt-14">
@@ -231,7 +231,7 @@ function Chips({ m }: { m: JourneyMilestone }) {
       ) : null}
       <ul className={`${m.chipsLabel ? 'mt-1.5' : 'mt-3'} flex flex-wrap gap-1.5`}>
         {m.chips.map((c) => (
-          <li key={c} className="tag">
+          <li key={c} className="tag !px-2 !text-[0.625rem]">
             {c}
           </li>
         ))}
@@ -257,9 +257,75 @@ function Bullets({ items }: { items: Highlight[] }) {
   )
 }
 
+function Path({ m, color }: { m: JourneyMilestone; color: string }) {
+  if (!m.path?.length) return null
+  return (
+    <div className="mt-4">
+      {m.pathLabel ? <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">{m.pathLabel}</p> : null}
+      <ol className="mt-2 flex flex-wrap items-center gap-y-2">
+        {m.path.map((p, i) => {
+          const last = i === m.path!.length - 1
+          return (
+            <motion.li
+              key={p}
+              className="flex items-center"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08 * i, duration: 0.25 }}
+            >
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-bold ${last ? 'text-white shadow-[var(--shadow-glow)]' : 'border border-line bg-white text-ink-soft'}`}
+                style={last ? { background: 'var(--gradient-cta)' } : undefined}
+              >
+                {p}
+              </span>
+              {!last ? (
+                <span className="mx-1.5 text-sm font-bold" style={{ color }} aria-hidden>
+                  →
+                </span>
+              ) : null}
+            </motion.li>
+          )
+        })}
+      </ol>
+    </div>
+  )
+}
+
+function Groups({ m, color }: { m: JourneyMilestone; color: string }) {
+  if (!m.groups?.length) return null
+  return (
+    <div className="grid gap-4 xl:grid-cols-2">
+      {m.groups.map((g) => (
+        <div key={g.label} className="rounded-2xl border border-line bg-paper/60 p-4">
+          <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.12em]" style={{ color }}>
+            {g.label}
+          </p>
+          <Bullets items={g.items} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Callout({ m }: { m: JourneyMilestone }) {
+  if (!m.callout) return null
+  return (
+    <div className="mt-4 flex items-start gap-3 rounded-2xl p-4 [background:linear-gradient(100deg,#efebff,#fde8f4)]">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-sm" aria-hidden>
+        ★
+      </span>
+      <p className="text-sm leading-relaxed text-ink-soft">
+        <strong className="font-semibold text-ink">{m.callout.lead}</strong> {m.callout.text}
+      </p>
+    </div>
+  )
+}
+
 function DetailBody({ m }: { m: JourneyMilestone }) {
   const isMsc = m.step === journey[LAST].step
-  const [tab, setTab] = useState<'milestones' | 'review'>('milestones')
+  const color = STEP_COLORS[journey.indexOf(m)] ?? STEP_COLORS[0]
+  const [tab, setTab] = useState<'milestones' | 'glance'>('milestones')
   const uid = useId()
 
   return (
@@ -271,7 +337,7 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
           {(
             [
               ['milestones', 'MSc Milestones & Leadership'],
-              ['review', dissertationReview.tab],
+              ['glance', dissertationGlance.tab],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -296,43 +362,161 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
         </div>
       ) : null}
 
+      <Path m={m} color={color} />
+
       <div className="mt-4" role={isMsc ? 'tabpanel' : undefined}>
-        {isMsc && tab === 'review' ? (
-          <Review />
+        {isMsc && tab === 'glance' ? (
+          <Glance />
+        ) : m.groups?.length ? (
+          <Groups m={m} color={color} />
         ) : m.highlights?.length ? (
           <Bullets items={m.highlights} />
         ) : null}
       </div>
+
+      <Callout m={m} />
     </div>
   )
 }
 
-function Review() {
-  const r = dissertationReview
+type NodeKind = 'llm' | 'rule' | 'end'
+
+const NODE_STYLE: Record<NodeKind, string> = {
+  llm: 'border-accent/25 bg-accent-soft/70',
+  rule: 'border-line bg-white',
+  end: 'border-transparent bg-night text-white',
+}
+
+function FlowNode({ kind, title, sub, delay = 0 }: { kind: NodeKind; title: string; sub?: string; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.3 }}
+      className={`rounded-xl border px-3 py-2.5 ${NODE_STYLE[kind]}`}
+    >
+      <p className={`text-[0.6875rem] font-extrabold leading-tight ${kind === 'end' ? 'text-white' : 'text-ink'}`}>{title}</p>
+      {sub ? <p className={`mt-0.5 text-[0.625rem] leading-snug ${kind === 'end' ? 'text-white/60' : 'text-muted'}`}>{sub}</p> : null}
+    </motion.div>
+  )
+}
+
+function Gate({ label, delay = 0 }: { label: string; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.3 }}
+      className="flex h-14 w-14 shrink-0 items-center justify-center"
+    >
+      <div className="flex h-10 w-10 rotate-45 items-center justify-center rounded-lg border border-sky/40 bg-sky-soft">
+        <span className="-rotate-45 text-[0.5625rem] font-extrabold text-sky">{label}</span>
+      </div>
+    </motion.div>
+  )
+}
+
+const Arrow = ({ label, down = false }: { label?: string; down?: boolean }) => (
+  <div className={`flex shrink-0 items-center justify-center text-muted ${down ? 'flex-col py-1' : 'px-1'}`} aria-hidden>
+    {label ? <span className="text-[0.5625rem] font-bold uppercase tracking-wide">{label}</span> : null}
+    <span className="text-xs leading-none">{down ? '↓' : '→'}</span>
+  </div>
+)
+
+/** Faux app window showing the Luxcal pipeline in the site's own style. */
+function Glance() {
+  const g = dissertationGlance
   return (
     <div>
-      <p className="text-xl font-extrabold tracking-tight">{r.title}</p>
+      <p className="text-xl font-extrabold tracking-tight">{g.title}</p>
       <ul className="mt-2 flex flex-wrap gap-1.5">
-        {r.stats.map((s) => (
+        {g.stats.map((s) => (
           <li key={s} className="tag tabular-nums">
             {s}
           </li>
         ))}
       </ul>
-      <div className="mt-5 grid gap-5 xl:grid-cols-2">
-        <div>
-          <p className="eyebrow !bg-mint-soft !text-mint">What worked</p>
-          <div className="mt-3">
-            <Bullets items={r.worked} />
+
+      <figure className="mt-5 overflow-hidden rounded-2xl border border-line bg-paper shadow-[var(--shadow-soft)]">
+        {/* Window chrome */}
+        <div className="flex items-center gap-2 border-b border-line bg-white px-4 py-2.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-pink/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-peach/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-mint/70" />
+          <span className="ml-3 truncate rounded-full bg-paper px-3 py-0.5 text-[0.625rem] font-semibold text-muted">
+            luxcal · {g.subtitle}
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+        <div className="min-w-[600px] space-y-3 p-4">
+          {/* Row 1: brief to gate */}
+          <div className="flex items-center">
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="rule" title="Brand brief" sub="Free-text input" />
+            </div>
+            <Arrow />
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="llm" title="Agent 1 · Brand Profiler" sub="Builds the brand profile" delay={0.08} />
+            </div>
+            <Arrow />
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="llm" title="Agent 2 · Calibration & Gate" sub="Scores the brand, sets the gate" delay={0.16} />
+            </div>
+            <Arrow />
+            <Gate label="Proceed?" delay={0.24} />
+            <Arrow label="No" />
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="rule" title="Reasoned refusal" sub="Says no, with a why" delay={0.3} />
+            </div>
+          </div>
+
+          <div className="flex justify-end pr-[25.5%]">
+            <Arrow label="Yes" down />
+          </div>
+
+          {/* Row 2: ideation loop to end */}
+          <div className="flex items-center">
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="end" title="END" sub="Calibrated ideas out" delay={0.6} />
+            </div>
+            <Arrow label="Pass" />
+            <Gate label="Verdict" delay={0.5} />
+            <Arrow />
+            <div className="min-w-0 flex-1">
+              <FlowNode kind="llm" title="Critic" sub="Pass, revise or escalate" delay={0.42} />
+            </div>
+            <Arrow />
+            <div className="relative min-w-0 flex-1">
+              <FlowNode kind="llm" title="Agent 3 · Ideation" sub="Ideas within the calibration" delay={0.36} />
+              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-pink-soft px-2 py-0.5 text-[0.5625rem] font-bold text-pink">
+                ↺ Revise loop
+              </span>
+            </div>
+          </div>
+
+          {/* Row 3: support */}
+          <div className="grid grid-cols-3 gap-3 border-t border-dashed border-line pt-3">
+            <FlowNode kind="rule" title="Human review" sub="Escalated cases" delay={0.66} />
+            <FlowNode kind="rule" title="Shared state" sub="LangGraph memory" delay={0.7} />
+            <FlowNode kind="rule" title="Two calibrated axes" sub="Low, medium, high bands" delay={0.74} />
           </div>
         </div>
-        <div className="rounded-2xl bg-pink-soft/60 p-5">
-          <p className="eyebrow !bg-white !text-pink">The candid takeaway</p>
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-            <strong className="font-semibold text-ink">{r.takeaway.lead}</strong> {r.takeaway.text}
-          </p>
         </div>
-      </div>
+
+        <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line bg-white px-4 py-2 text-[0.625rem] font-semibold text-muted">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-sm bg-accent-soft ring-1 ring-accent/30" /> LLM judgement
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-sm bg-white ring-1 ring-line" /> Deterministic
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rotate-45 rounded-[2px] bg-sky-soft ring-1 ring-sky/40" /> Gate
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-pink">↺ Feedback loop</span>
+        </figcaption>
+      </figure>
     </div>
   )
 }

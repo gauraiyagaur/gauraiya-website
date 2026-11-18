@@ -34,6 +34,13 @@ export interface JourneyMilestone {
   chips?: string[]
   /** Optional label shown before the chips. */
   chipsLabel?: string
+  /** Optional step-by-step path shown at the top of the details. */
+  path?: string[]
+  pathLabel?: string
+  /** Grouped details, shown side by side instead of `highlights`. */
+  groups?: { label: string; items: Highlight[] }[]
+  /** One standout line shown in a tinted box under the details. */
+  callout?: Highlight
 }
 
 export interface ProjectReflection {
@@ -98,6 +105,11 @@ export const profile = {
   portrait: '/portrait.jpg',
   portraitAlt: 'Gauraiya Gaur on a London street at Christmas',
   cvUrl: '/Gauraiya_Gaur_CV.pdf',
+  /** Two CV versions offered from the hero. Leave url empty until the PDF is in /public. */
+  cvs: [
+    { label: 'Data Scientist', note: 'Analytics, ML & measurement', url: '/Gauraiya_Gaur_CV.pdf' },
+    { label: 'AI Developer', note: 'Multi-agent & LLM systems', url: '' }, // TODO: add AI Developer CV PDF
+  ],
   email: 'gauraiyagaurwork@gmail.com',
   linkedin: 'https://www.linkedin.com/in/gauraiya-gaur-7053081b5/',
   github: 'https://github.com/gauraiyagaur',
@@ -114,10 +126,10 @@ export const navLinks = [
 ]
 
 export const kpis: KpiMetric[] = [
-  { id: 'industry', value: '3.5', label: 'Industry Execution', sublabel: 'Years shipping enterprise data & AI solutions.' },
-  { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years of continuous building, research & upskilling.' },
+  { id: 'industry', value: '3.5 yrs', label: 'Industry Execution', sublabel: 'In shipping enterprise data & AI solutions.' },
+  { id: 'immersion', value: '5+', label: 'Deep AI Immersion', sublabel: 'Years spent breaking, building, and mastering the AI stack.' },
   { id: 'independent', value: '6+', label: 'Independent Projects', sublabel: '6 shipped, 4 more in progress across ML, optimisation & agents.' },
-  { id: 'client', value: '5', label: 'Client Projects', sublabel: 'Enterprise data & AI work for global brands.' },
+  { id: 'client', value: '5', label: 'Client Projects', sublabel: 'Delivered for Fortune 500 & global retail brands.' },
 ]
 
 export const journey: JourneyMilestone[] = [
@@ -129,9 +141,26 @@ export const journey: JourneyMilestone[] = [
     organization: 'BSc Computer & Communication Engineering, Manipal University Jaipur',
     period: '2018 – 2022',
     summary: 'Algorithms, data structures and clean architecture, before any model.',
-    highlights: [
-      { lead: 'Systems first.', text: 'Learnt how clean systems are architected before touching a predictive model.' },
-      { lead: 'Grounded.', text: 'Algorithms, data structures and software engineering principles. CGPA 8/10.' },
+    path: ['Software dev', 'Hardware & networks', 'ACM · Python', 'Data Science elective', 'AI'],
+    pathLabel: 'How the plan changed',
+    groups: [
+      {
+        label: 'In the classroom',
+        items: [
+          { lead: 'Came in for code.', text: 'Entered university sure that software development was my calling.' },
+          { lead: 'Tried everything.', text: 'Software, hardware, data structures, computer networks. Learnt the basics of it all, yet still felt unsatisfied.' },
+          { lead: 'A lucky conversation.', text: 'Joined ACM with friends to learn Python, picked Data Science as an elective, and got hooked on the world of AI.' },
+          { lead: 'Grounded.', text: 'Algorithms, data structures and software engineering principles. CGPA 8/10.' },
+        ],
+      },
+      {
+        label: 'Beyond the classroom',
+        items: [
+          { lead: 'Music.', text: 'Followed my love for music alongside studies and won ensemble competitions.' },
+          { lead: 'Found my voice.', text: 'Volunteered to work on my personality and confidence.' },
+          { lead: 'Rose through the ranks.', text: 'Volunteer → Assistant Secretary General → Treasurer, spanning multiple clubs and fests.' },
+        ],
+      },
     ],
   },
   {
@@ -141,10 +170,24 @@ export const journey: JourneyMilestone[] = [
     title: 'Fell for ML',
     organization: 'Discovering predictive intelligence',
     summary: 'From writing rules to building systems that learn from messy data.',
-    highlights: [
-      { lead: 'First model.', text: 'Final-year project: machine-learning prediction of cardiovascular disease.' },
-      { lead: 'New mindset.', text: 'Shifted from deterministic rules to systems that learn patterns from real-world data.' },
+    groups: [
+      {
+        label: 'The project',
+        items: [
+          { lead: 'First model.', text: 'Final-year project: machine-learning prediction of cardiovascular disease.' },
+          { lead: 'New mindset.', text: 'Shifted from deterministic rules to systems that learn patterns from real-world data.' },
+        ],
+      },
+      {
+        label: 'Challenges I cracked',
+        items: [
+          { lead: 'Big data, first time.', text: 'Navigated large Kaggle datasets with NumPy and pandas for the very first time.' },
+          { lead: 'Learning to model.', text: 'A first-time learner of predictive modelling, figuring it out end to end.' },
+          { lead: 'Measuring what matters.', text: 'Ran my first model comparison and learnt the nuance between precision, recall, accuracy and F1.' },
+        ],
+      },
     ],
+    callout: { lead: 'The payoff.', text: 'This project landed my first job, as a Data Analyst at MathCo.' },
   },
   {
     step: '03',
@@ -154,11 +197,13 @@ export const journey: JourneyMilestone[] = [
     organization: 'Enterprise consulting & production delivery, Bangalore',
     period: '2022 – 2025',
     summary: 'Shipped ML for global brands. Analyst to lead measurement.',
+    chipsLabel: 'Fortune 500 & global brands',
     chips: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
     highlights: [
-      { lead: '~15% efficiency lift.', text: 'Early-intervention model for Customer Success, deployed end to end, paid off in month one.' },
+      { lead: '~15% efficiency lift.', text: 'Early-intervention model for Campaign Success, deployed end to end, paid off in month one.' },
       { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },
-      { lead: 'Led squads.', text: 'Moved from analyst to lead measurement, running cross-functional teams and building front-end decision simulators.' },
+      { lead: 'Promoted to Data Scientist.', text: 'Moved up from analyst: ran cross-functional teams, mentored interns on their capstone project and coached team members, lifting the team’s efficiency.' },
+      { lead: 'Staffing simulator.', text: 'Built a simulator for an American electronics retailer to manage front-end staffing, improving close rate (orders billed or attended to at the desk).' },
     ],
   },
   {
@@ -169,10 +214,27 @@ export const journey: JourneyMilestone[] = [
     organization: 'MSc Business Analytics & AI, Warwick Business School',
     period: '2025 – 2026',
     summary: 'Left consulting for the frontier: LLMs, multi-agent and neuro-symbolic AI.',
-    highlights: [
-      { lead: 'Bet on depth.', text: 'Stepped away from full-time consulting and moved to the UK to deepen technical rigour.' },
-      { lead: 'Frontier focus.', text: 'Large language models, multi-agent orchestration and neuro-symbolic AI architectures.' },
+    groups: [
+      {
+        label: 'Why I went',
+        items: [
+          { lead: 'Hit a ceiling.', text: 'As a data scientist I could see where I could contribute more, but my knowledge held me back. For GoFundMe, knowing neural networks (NLP specifically) would have given them exactly what they wanted.' },
+          { lead: 'Bet on depth.', text: 'Stepped away from full-time consulting and moved to the UK to deepen technical rigour.' },
+          { lead: 'Biggest learning.', text: 'How to break down the analytical rigour a problem needs, plus neural networks, optimisation and forecasting models.' },
+          { lead: 'Frontier focus.', text: 'Large language models, multi-agent orchestration and neuro-symbolic AI architectures.' },
+        ],
+      },
+      {
+        label: 'Who I became',
+        items: [
+          { lead: 'All in.', text: 'Of every academic phase, Warwick is where I devoted myself completely to learning.' },
+          { lead: 'Solo to team player.', text: 'I loved working by myself, but immense group work and an amazing cohort taught me to excel in teams and deliver more.' },
+          { lead: 'A global circle.', text: 'Made friends from every part of the world over shared interests in data, strategy, stats and finance.' },
+          { lead: 'Wider worldview.', text: 'Stepping outside India gave me confidence and a view of where the world is headed with AI.' },
+        ],
+      },
     ],
+    callout: { lead: 'Gillmore Centre.', text: 'Given the opportunity to work with the Gillmore Centre for Financial Technology.' },
   },
   {
     step: '05',
@@ -194,19 +256,12 @@ export const journey: JourneyMilestone[] = [
   },
 ]
 
-export const dissertationReview = {
-  tab: 'Dissertation Review: Luxcal',
-  title: 'Luxcal: multi-agent luxury market research',
+/** Step 05 second tab: a faux-UI view of the Luxcal architecture. */
+export const dissertationGlance = {
+  tab: 'Dissertation at a glance',
+  title: 'Luxcal: an AI calibration system',
+  subtitle: 'Multi-agent pipeline · LangGraph orchestration',
   stats: ['10,000 words', '11 brand cases', '5 ablation conditions'],
-  worked: [
-    { lead: 'Replicable methodology.', text: 'Examiners singled out the method: a clearly specified 11-cell action space and gate logic, specified well enough to rebuild from scratch.' },
-    { lead: 'Neuro-symbolic soundness.', text: 'Deterministic gate logic kept separate from LLM judgement, backed by ablation testing across five conditions.' },
-    { lead: 'Beyond safe domains.', text: 'Pushed multi-agent research into the nuanced constraints of luxury market research.' },
-  ] as Highlight[],
-  takeaway: {
-    lead: 'Rigour over speed.',
-    text: 'Examiner feedback flagged citation verification, baseline sample tracking (n = 30 vs n = 33) and structural polish. Strong engineering needs unhurried, meticulous documentation.',
-  } as Highlight,
 }
 
 export const projects: ProjectItem[] = [
