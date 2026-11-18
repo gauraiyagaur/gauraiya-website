@@ -107,8 +107,8 @@ export const profile = {
   cvUrl: '/Gauraiya_Gaur_CV.pdf',
   /** Two CV versions offered from the hero. Leave url empty until the PDF is in /public. */
   cvs: [
-    { label: 'Data Scientist', note: 'Analytics, ML & measurement', url: '/Gauraiya_Gaur_CV.pdf' },
-    { label: 'AI Developer', note: 'Multi-agent & LLM systems', url: '' }, // TODO: add AI Developer CV PDF
+    { label: 'AI Developer', note: 'Multi-agent & LLM systems', url: '/Gauraiya_Gaur_CV.pdf' },
+    { label: 'Data Scientist', note: 'Analytics, ML & measurement', url: '' }, // TODO: add Data Scientist CV PDF
   ],
   email: 'gauraiyagaurwork@gmail.com',
   linkedin: 'https://www.linkedin.com/in/gauraiya-gaur-7053081b5/',
