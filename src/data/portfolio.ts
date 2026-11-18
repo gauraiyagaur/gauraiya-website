@@ -202,9 +202,9 @@ export const journey: JourneyMilestone[] = [
     brands: ['Walmart Connect', 'Best Buy', 'Redbox', 'GoFundMe'],
     highlights: [
       { lead: '~15% efficiency lift.', text: 'Early-intervention model for Campaign Success, deployed end to end, paid off in month one.' },
-      { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },
-      { lead: 'Promoted to Data Scientist.', text: 'Moved up from analyst: ran cross-functional teams, mentored interns on their capstone project and coached team members, lifting the team’s efficiency.' },
       { lead: 'Staffing simulator.', text: 'Built a simulator for an American electronics retailer to manage front-end staffing, improving close rate (orders billed or attended to at the desk).' },
+      { lead: 'Promoted to Data Scientist.', text: 'Moved up from analyst: ran cross-functional teams, mentored interns on their capstone project and coached team members, lifting the team’s efficiency.' },
+      { lead: '$2.78B consumer impact.', text: 'Omni-channel measurement framework built with Walmart Connect leadership.' },
     ],
   },
   {
