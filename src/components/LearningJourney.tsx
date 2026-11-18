@@ -392,114 +392,39 @@ function DetailBody({ m }: { m: JourneyMilestone }) {
   )
 }
 
-type NodeKind = 'llm' | 'rule' | 'end' | 'stop'
+const PIPELINE: { label: string; icon: Parameters<typeof Icon>[0]['name'] }[] = [
+  { label: 'Read the brand', icon: 'profile' },
+  { label: 'Calibrate & gate', icon: 'gauge' },
+  { label: 'Ideate', icon: 'bulb' },
+  { label: 'Critique', icon: 'shield' },
+]
 
-const NODE_STYLE: Record<NodeKind, string> = {
-  llm: 'border-accent/25 bg-accent-soft/70',
-  rule: 'border-line bg-white',
-  stop: 'border-pink/25 bg-pink-soft/60',
-  end: 'border-transparent bg-night text-white',
-}
+const PROFILE = [0.82, 0.64, 0.9, 0.48, 0.72]
 
-const ICON_STYLE: Record<NodeKind, string> = {
-  llm: 'bg-white text-accent',
-  rule: 'bg-paper text-ink-soft',
-  stop: 'bg-white text-pink',
-  end: 'bg-white/10 text-white',
-}
-
-type FlowIconName = Parameters<typeof Icon>[0]['name']
-type Step = { t: string; k?: 'llm' | 'rule' }
-
-function FlowNode({
-  kind,
-  icon,
-  tag,
-  title,
-  meta,
-  lines,
-  steps,
-  delay = 0,
-}: {
-  kind: NodeKind
-  icon: FlowIconName
-  tag?: string
-  title: string
-  /** Model line, e.g. "Sonnet 4.6 · temp 0.0". */
-  meta?: string
-  lines?: string[]
-  /** Sub-steps tagged as LLM or rule-based. */
-  steps?: Step[]
-  delay?: number
-}) {
-  const dark = kind === 'end'
+function Meter({ label, level, tone }: { label: string; level: 1 | 2 | 3; tone: string }) {
+  const names = ['Low', 'Medium', 'High']
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.3 }}
-      whileHover={{ y: -2 }}
-      className={`h-full rounded-xl border px-2.5 py-2 ${NODE_STYLE[kind]}`}
-    >
-      <div className="flex items-center gap-1.5">
-        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${ICON_STYLE[kind]}`}>
-          <Icon name={icon} size={12} stroke={2.25} />
-        </span>
-        {tag ? (
-          <span className={`text-[0.5rem] font-extrabold uppercase tracking-[0.12em] ${dark ? 'text-white/60' : 'text-muted'}`}>{tag}</span>
-        ) : null}
+    <div>
+      <div className="flex items-center justify-between text-[0.625rem] font-bold">
+        <span className="text-ink">{label}</span>
+        <span style={{ color: tone }}>{names[level - 1]}</span>
       </div>
-      <p className={`mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight ${dark ? 'text-white' : 'text-ink'}`}>{title}</p>
-      {meta ? <p className="mt-0.5 whitespace-nowrap font-mono text-[0.5rem] font-semibold text-accent/80">{meta}</p> : null}
-      {steps?.length ? (
-        <ul className="mt-1.5 space-y-0.5">
-          {steps.map((st) => (
-            <li key={st.t} className="flex items-center gap-1 text-[0.5625rem] leading-snug text-ink-soft">
-              <span
-                className={`h-1.5 w-1.5 shrink-0 rounded-[2px] ${st.k === 'rule' ? 'bg-white ring-1 ring-ink/25' : 'bg-accent/60'}`}
-                aria-hidden
-              />
-              <span>{st.t}</span>
-              <span className="sr-only">{st.k === 'rule' ? '(rule-based)' : '(LLM)'}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      {lines?.map((l) => (
-        <p key={l} className={`mt-0.5 text-[0.5625rem] leading-snug ${dark ? 'text-white/70' : 'text-muted'}`}>
-          {l}
-        </p>
-      ))}
-    </motion.div>
+      <div className="mt-1 grid grid-cols-3 gap-1">
+        {[1, 2, 3].map((n) => (
+          <motion.span
+            key={n}
+            className="h-1.5 rounded-full"
+            initial={{ backgroundColor: '#ebe9f3' }}
+            animate={{ backgroundColor: n <= level ? tone : '#ebe9f3' }}
+            transition={{ delay: 0.9 + n * 0.12, duration: 0.3 }}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 
-function Gate({ label, delay = 0 }: { label: string; delay?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay, duration: 0.3 }}
-      className="flex h-16 w-16 shrink-0 items-center justify-center"
-    >
-      <div className="flex h-11 w-11 rotate-45 items-center justify-center rounded-lg border border-sky/40 bg-sky-soft">
-        <span className="-rotate-45 text-[0.5rem] font-extrabold uppercase text-sky">{label}</span>
-      </div>
-    </motion.div>
-  )
-}
-
-const Arrow = ({ label, dir = 'right', tone = 'muted' }: { label?: string; dir?: 'right' | 'left' | 'down'; tone?: 'muted' | 'pink' }) => (
-  <div
-    className={`flex shrink-0 items-center justify-center ${tone === 'pink' ? 'text-pink' : 'text-muted'} ${dir === 'down' ? 'flex-col py-0.5' : 'flex-col px-1'}`}
-    aria-hidden
-  >
-    {label ? <span className="text-[0.5rem] font-extrabold uppercase tracking-wide">{label}</span> : null}
-    <span className="text-xs leading-none">{dir === 'down' ? '↓' : dir === 'left' ? '←' : '→'}</span>
-  </div>
-)
-
-/** Faux app window showing the Luxcal pipeline in the site's own style. */
+/** Faux product screen giving a concept overview of Luxcal, without exposing its internals. */
 function Glance() {
   const g = dissertationGlance
   return (
@@ -519,205 +444,131 @@ function Glance() {
           <span className="h-2.5 w-2.5 rounded-full bg-pink/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-peach/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-mint/70" />
-          <span className="ml-3 truncate rounded-full bg-paper px-3 py-0.5 text-[0.625rem] font-semibold text-muted">
-            luxcal · {g.subtitle}
-          </span>
+          <span className="ml-3 truncate rounded-full bg-paper px-3 py-0.5 text-[0.625rem] font-semibold text-muted">luxcal · brand AI calibration</span>
+          <span className="ml-auto rounded-full bg-accent-soft px-2 py-0.5 text-[0.5625rem] font-bold text-accent">Concept preview</span>
         </div>
 
         <div className="overflow-x-auto">
-          <div className="min-w-[640px] p-4">
-            {/* Row 1: brief → profiler → calibration → gate → refusal */}
-            <div className="flex items-stretch">
-              <div className="w-[16%]">
-                <FlowNode kind="rule" icon="doc" tag="Entry point" title="Brand brief" lines={['Unstructured client brief, in free text']} />
-              </div>
-              <Arrow />
-              <div className="w-[20%]">
-                <FlowNode
-                  kind="llm"
-                  icon="profile"
-                  tag="Agent 1"
-                  title="Brand Profiler"
-                  meta="Sonnet 4.6 · temp 0.0"
-                  lines={['Out: BrandProfile, D1 to D5', 'Rarity · invisibility · values · motivation · control', 'Evidence span + confidence each']}
-                  delay={0.08}
-                />
-              </div>
-              <Arrow />
-              <div className="w-[21%]">
-                <FlowNode
-                  kind="llm"
-                  icon="gauge"
-                  tag="Agent 2"
-                  title="Calibration & Gate"
-                  meta="Opus 4.6 · temp 0.0 + rules"
-                  steps={[
-                    { t: 'Gate', k: 'llm' },
-                    { t: 'Ceilings', k: 'rule' },
-                    { t: 'Locus filter', k: 'rule' },
-                    { t: 'Ranking', k: 'llm' },
-                  ]}
-                  lines={['Out: gate, bands, ranked loci']}
-                  delay={0.16}
-                />
-              </div>
-              <Arrow />
-              <div className="flex items-center">
-                <Gate label="Proceed?" delay={0.24} />
-              </div>
-              <Arrow label="No" tone="pink" />
-              <div className="flex-1">
-                <FlowNode kind="stop" icon="ban" tag="Terminal" title="Reasoned refusal" lines={['Run ends with a written justification']} delay={0.3} />
-              </div>
-            </div>
-
-            {/* Yes branch drops from the gate */}
-            <div className="relative h-8">
-              <div className="absolute top-0.5 -translate-x-1/2" style={{ left: 'var(--gate-x, 70%)' }}>
-                <Arrow label="Yes" dir="down" />
-              </div>
-            </div>
-
-            {/* Row 2 (right to left): ideation → critic → verdict → output */}
-            <div className="flex items-stretch">
-              <div className="flex-1">
-                <FlowNode
-                  kind="end"
-                  icon="target"
-                  tag="Output"
-                  title="Calibrated AI plan"
-                  lines={['Where and how to calibrate AI for a brand brief']}
-                  delay={0.62}
-                />
-              </div>
-              <Arrow label="Pass" dir="left" />
-              <div className="flex items-center">
-                <Gate label="Verdict" delay={0.54} />
-              </div>
-              <Arrow dir="left" />
-              <div className="w-[23%]">
-                <FlowNode
-                  kind="llm"
-                  icon="shield"
-                  tag="Critic"
-                  title="Two-check review"
-                  meta="Opus 4.6 · temp 0.0"
-                  steps={[
-                    { t: 'Claimed bands ≤ ceilings?', k: 'rule' },
-                    { t: 'Concept matches its bands?', k: 'llm' },
-                  ]}
-                  lines={['Verdict: pass, revise or escalate']}
-                  delay={0.46}
-                />
-              </div>
-              <Arrow dir="left" />
-              <div className="w-[22%]">
-                <FlowNode
-                  kind="llm"
-                  icon="bulb"
-                  tag="Agent 3"
-                  title="Ideation"
-                  meta="Sonnet 4.6 · temp 0.7"
-                  lines={['In: top locus, ceilings, profile', 'Out: concept with mechanism, AI position, claimed visibility + intensity']}
-                  delay={0.38}
-                />
-              </div>
-              <div className="flex w-[17%] items-center justify-center">
-                <span className="inline-flex flex-col items-center rounded-xl bg-pink-soft px-2 py-1 text-center text-[0.5rem] font-extrabold uppercase leading-tight text-pink">
-                  <Icon name="loop" size={10} stroke={2.5} />
-                  Revise loop
-                  <span className="font-semibold normal-case">max 3 iterations</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Escalate branch drops from the verdict */}
-            <div className="relative h-8">
-              <div className="absolute top-0.5 -translate-x-1/2" style={{ left: 'var(--verdict-x, 29%)' }}>
-                <Arrow label="Escalate" dir="down" />
-              </div>
-            </div>
-
-            {/* Row 3: supporting pieces */}
-            <div className="grid grid-cols-[1fr_1.25fr_1.25fr] gap-3">
-              <FlowNode kind="stop" icon="eye" tag="Terminal" title="Human review" lines={['Iteration budget spent without a passing concept']} delay={0.7} />
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.74, duration: 0.3 }}
-                className="rounded-xl border border-line bg-white px-2.5 py-2"
-              >
-                <div className="flex items-center gap-1.5">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-md bg-paper text-ink-soft">
-                    <Icon name="database" size={12} stroke={2.25} />
-                  </span>
-                  <span className="text-[0.5rem] font-extrabold uppercase tracking-[0.12em] text-muted">LangGraph</span>
-                </div>
-                <p className="mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight text-ink">Shared state</p>
-                <ul className="mt-1.5 flex flex-wrap gap-1">
-                  {['run_id', 'brief', 'profile', 'calibration', 'concept', 'verdict', 'iteration', 'critic_history', 'terminal_state'].map((f) => (
-                    <li key={f} className="rounded bg-paper px-1 py-px font-mono text-[0.5rem] text-ink-soft">
-                      {f}
-                    </li>
+          <div className="grid min-w-[600px] grid-cols-[0.9fr_1.1fr] gap-3 p-4">
+            {/* Left: input + run status */}
+            <div className="space-y-3">
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="flex items-center gap-1.5 text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">
+                  <Icon name="doc" size={11} stroke={2.25} /> Brand brief
+                </p>
+                <div className="mt-2 space-y-1.5" aria-hidden>
+                  {['w-full', 'w-11/12', 'w-4/5', 'w-2/3'].map((w) => (
+                    <span key={w} className={`block h-1.5 rounded-full bg-paper ${w}`} />
                   ))}
-                </ul>
-                <p className="mt-1.5 text-[0.5625rem] leading-snug text-muted">Every agent reads what it needs and writes only its own field.</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.78, duration: 0.3 }}
-                className="rounded-xl border border-line bg-white px-2.5 py-2"
-              >
-                <div className="flex items-center gap-1.5">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-md bg-paper text-ink-soft">
-                    <Icon name="sliders" size={12} stroke={2.25} />
-                  </span>
-                  <span className="text-[0.5rem] font-extrabold uppercase tracking-[0.12em] text-muted">Computed in Agent 2</span>
                 </div>
-                <p className="mt-1.5 whitespace-nowrap text-[0.6875rem] font-extrabold leading-tight text-ink">Two calibrated axes</p>
-                <div className="mt-1.5 space-y-1">
-                  <p className="text-[0.5625rem] leading-snug text-ink-soft">
-                    <span className="font-bold text-accent">Visibility</span> <span className="font-mono">← D2 + D4 + D5</span>
-                    <span className="block text-muted">How perceptible the AI is to the client</span>
-                  </p>
-                  <p className="text-[0.5625rem] leading-snug text-ink-soft">
-                    <span className="font-bold text-pink">Intensity</span> <span className="font-mono">← D1 + D3 + D5</span>
-                    <span className="block text-muted">How far the offering differentiates per person</span>
-                  </p>
-                </div>
-                <div className="mt-1.5 flex gap-1">
-                  {['Low ≤1', 'Medium ≤3', 'High ≥4'].map((b, n) => (
-                    <span
-                      key={b}
-                      className={`rounded-full px-1.5 py-px text-[0.5rem] font-bold ${['bg-mint-soft text-mint', 'bg-peach-soft text-peach', 'bg-pink-soft text-pink'][n]}`}
+                <p className="mt-2 text-[0.625rem] italic leading-snug text-ink-soft">“A heritage maison whose clients value discretion and craft…”</p>
+                <motion.span
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.625rem] font-bold text-white"
+                  style={{ background: 'var(--gradient-cta)' }}
+                  whileHover={{ scale: 1.04 }}
+                >
+                  <Icon name="spark" size={10} stroke={2.5} /> Calibrate
+                </motion.span>
+              </div>
+
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Agents at work</p>
+                <ol className="mt-2 space-y-1.5">
+                  {PIPELINE.map((st, n) => (
+                    <motion.li
+                      key={st.label}
+                      className="flex items-center gap-2 text-[0.6875rem] font-semibold text-ink"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 + n * 0.15 }}
                     >
-                      {b}
-                    </span>
+                      <span className="flex h-5 w-5 items-center justify-center rounded-md bg-accent-soft text-accent">
+                        <Icon name={st.icon} size={11} stroke={2.25} />
+                      </span>
+                      {st.label}
+                      <motion.span
+                        className="ml-auto flex h-4 w-4 items-center justify-center rounded-full bg-mint text-[0.5rem] text-white"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.35 + n * 0.15, type: 'spring', stiffness: 400, damping: 18 }}
+                        aria-label="done"
+                      >
+                        ✓
+                      </motion.span>
+                    </motion.li>
                   ))}
+                </ol>
+                <p className="mt-2.5 flex items-center gap-1.5 text-[0.5625rem] font-semibold text-pink">
+                  <Icon name="loop" size={10} stroke={2.5} /> Self-checks and revises before answering
+                </p>
+              </div>
+            </div>
+
+            {/* Right: results */}
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <div className="flex-1 rounded-xl border border-line bg-white p-3">
+                  <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Brand profile</p>
+                  <div className="mt-2 flex h-14 items-end gap-1.5" aria-hidden>
+                    {PROFILE.map((v, n) => (
+                      <motion.span
+                        key={n}
+                        className="flex-1 rounded-t-md"
+                        style={{ background: 'var(--gradient-cta)', opacity: 0.35 + v * 0.6 }}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${v * 100}%` }}
+                        transition={{ delay: 0.4 + n * 0.08, duration: 0.5, ease: 'easeOut' }}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-1.5 text-[0.5625rem] text-muted">Five luxury dimensions</p>
+                </div>
+                <div className="w-[42%] rounded-xl border border-line bg-white p-3">
+                  <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Gate</p>
+                  <motion.p
+                    className="mt-2 inline-flex items-center gap-1 rounded-full bg-mint-soft px-2 py-1 text-[0.625rem] font-extrabold text-mint"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.8 }}
+                  >
+                    ● AI fits this brand
+                  </motion.p>
+                  <p className="mt-2 text-[0.5625rem] leading-snug text-muted">Says no, with reasons, when it doesn’t.</p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-line bg-white p-3">
+                <p className="text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-muted">Calibration</p>
+                <div className="mt-2 grid grid-cols-2 gap-4">
+                  <Meter label="AI visibility" level={1} tone="#12B886" />
+                  <Meter label="Personal intensity" level={2} tone="#F59F0B" />
+                </div>
+              </div>
+
+              <motion.div
+                className="rounded-xl bg-night p-3 text-white"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+              >
+                <p className="flex items-center gap-1.5 text-[0.5625rem] font-extrabold uppercase tracking-[0.12em] text-white/60">
+                  <Icon name="target" size={11} stroke={2.25} /> Output
+                </p>
+                <p className="mt-1 text-[0.8125rem] font-extrabold leading-snug">Where and how to calibrate AI for this brand brief</p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[0.5625rem] leading-snug">
+                  <p className="rounded-lg bg-white/10 p-2">
+                    <span className="block font-bold text-white">Where</span>
+                    <span className="text-white/70">The touchpoint where AI adds value</span>
+                  </p>
+                  <p className="rounded-lg bg-white/10 p-2">
+                    <span className="block font-bold text-white">How</span>
+                    <span className="text-white/70">A concept kept inside the calibrated limits</span>
+                  </p>
                 </div>
               </motion.div>
             </div>
           </div>
         </div>
-
-        <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line bg-white px-4 py-2 text-[0.625rem] font-semibold text-muted">
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-accent-soft ring-1 ring-accent/30" /> LLM judgement
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-white ring-1 ring-ink/25" /> Deterministic / rule-based
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rotate-45 rounded-[2px] bg-sky-soft ring-1 ring-sky/40" /> Gate
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-pink-soft ring-1 ring-pink/30" /> Terminal
-          </span>
-          <span className="inline-flex items-center gap-1 text-pink">
-            <Icon name="loop" size={10} stroke={2.5} /> Feedback loop
-          </span>
-        </figcaption>
       </figure>
     </div>
   )
