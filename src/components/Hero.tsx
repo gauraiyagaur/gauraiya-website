@@ -120,7 +120,7 @@ export function Hero() {
             </p>
             <p className="mt-2 text-sm font-extrabold leading-snug tracking-tight">Backend alone wasn’t my scene.</p>
             <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
-              So I moved away from core software development and into AI.
+              So I moved into AI. It gives me room to go beyond development, measure impact and give the business real reasoning.
             </p>
           </motion.div>
 
