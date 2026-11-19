@@ -58,6 +58,7 @@ export function CvMenu() {
                   role="menuitem"
                   href={cv.url}
                   download
+                  target="_blank" rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                   className="group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-accent-soft"
                 >

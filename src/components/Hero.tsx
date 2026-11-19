@@ -25,7 +25,7 @@ export function Hero() {
             Gauraiya <span className="text-gradient">Gaur.</span>
           </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">{profile.intro}</p>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">{profile.intro}</p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <MorphPill href={hireMeHref} variant="primary">
