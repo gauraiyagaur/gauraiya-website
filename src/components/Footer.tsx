@@ -2,6 +2,8 @@ import { hireMeHref, profile } from '~/data/portfolio'
 import { Icon } from './Icon'
 import { MorphPill } from './MorphPill'
 
+const openRoles = ['Strategy', 'Analytics', 'Data Science', 'AI Engineering', 'Agentic AI']
+
 const links = [
   { label: 'Email', href: `mailto:${profile.email}`, text: profile.email },
   { label: 'LinkedIn', href: profile.linkedin, text: 'Gauraiya Gaur' },
@@ -20,7 +22,14 @@ export function Footer() {
               <h2 className="display mt-5 text-[clamp(2.25rem,7vw,5rem)]">
                 Let’s build something <span className="text-gradient">real.</span>
               </h2>
-              <p className="mt-4 max-w-md text-ink-soft">Open to data science and AI engineering roles. I usually reply within a day.</p>
+              <p className="mt-4 max-w-md text-ink-soft">Open to roles across strategy, analytics and AI. I usually reply within a day.</p>
+              <ul className="mt-4 flex flex-wrap gap-2" aria-label="Roles I'm open to">
+                {openRoles.map((r) => (
+                  <li key={r} className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-bold text-accent shadow-[var(--shadow-soft)]">
+                    {r}
+                  </li>
+                ))}
+              </ul>
               <div className="mt-8">
                 <MorphPill href={hireMeHref} variant="primary">
                   Hire Me
