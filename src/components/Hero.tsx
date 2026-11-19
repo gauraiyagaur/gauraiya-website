@@ -14,7 +14,7 @@ const float = (delay: number) => ({
 export function Hero() {
   return (
     <section id="top" aria-labelledby="hero-title" className="pt-10 sm:pt-16">
-      <div className="container-grid grid items-center gap-14 pb-16 lg:grid-cols-12 lg:gap-10 lg:pb-24">
+      <div className="container-grid grid items-center gap-10 pb-16 sm:gap-14 lg:grid-cols-12 lg:gap-10 lg:pb-24">
         <div className="lg:col-span-6">
           <p className="eyebrow">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
@@ -49,7 +49,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-md lg:col-span-6 lg:max-w-none lg:pl-10">
+        <div className="relative order-first mx-auto w-full max-w-[17rem] sm:max-w-md lg:order-none lg:col-span-6 lg:max-w-none lg:pl-10">
           {/* Pastel glow */}
           <div
             className="absolute -inset-6 -z-10 rounded-[3rem] opacity-90 blur-2xl [background:linear-gradient(135deg,#efebff,#fde8f4_50%,#e3f8f0)]"

@@ -43,9 +43,16 @@ html {
   scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 
-html,
+/* Stop decorative glows from causing sideways scroll. `hidden` is the
+   fallback for older mobile browsers that don't support `clip`. */
 body {
-  overflow-x: clip;
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
 }
 
 body {
