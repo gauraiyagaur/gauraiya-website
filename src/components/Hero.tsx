@@ -85,7 +85,7 @@ export function Hero() {
               <span className="mt-0.5 block text-[0.625rem] text-ink-soft">Distinction modules</span>
             </span>
           </motion.div>
-          <motion.div {...float(0.8)} className="card absolute -right-3 top-[26%] flex items-center gap-2 p-2 pr-3 sm:hidden" aria-hidden>
+          <motion.div {...float(0.8)} className="card absolute -right-3 top-[36%] flex items-center gap-2 p-2 pr-3 sm:hidden" aria-hidden>
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-peach-soft text-peach">
               <Icon name="briefcase" size={13} />
             </span>
