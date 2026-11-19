@@ -21,7 +21,7 @@ export function Hero() {
             {profile.role}
           </p>
 
-          <h1 id="hero-title" className="display mt-6 text-[clamp(3.25rem,9vw,6.25rem)]">
+          <h1 id="hero-title" className="display mt-6 text-[clamp(2.75rem,9vw,6.25rem)]">
             Gauraiya <span className="text-gradient">Gaur.</span>
           </h1>
 

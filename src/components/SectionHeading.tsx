@@ -17,7 +17,7 @@ export function SectionHeading({
   return (
     <div className="mx-auto max-w-3xl text-center">
       <p className={`eyebrow mx-auto ${dark ? 'bg-white/10 text-white' : ''}`}>{label}</p>
-      <h2 id={id} className={`display mt-4 text-4xl sm:text-5xl ${dark ? 'text-white' : ''}`}>
+      <h2 id={id} className={`display mt-4 text-[2rem] sm:text-5xl ${dark ? 'text-white' : ''}`}>
         {title}
       </h2>
       {children ? (
