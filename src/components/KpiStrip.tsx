@@ -27,7 +27,7 @@ function CountUp({ value }: { value: string }) {
     <span ref={ref} className="tabular-nums">
       {shown}
       {/* A worded unit like " yrs" sits smaller beside the number; symbols like "+" stay full size. */}
-      {/^\s/.test(suffix) ? <span className="ml-1.5 text-2xl font-bold text-white/80 sm:text-3xl">{suffix.trim()}</span> : suffix}
+      {/^\s/.test(suffix) ? <span className="ml-1 text-xl font-bold text-white/80 sm:ml-1.5 sm:text-3xl">{suffix.trim()}</span> : suffix}
     </span>
   )
 }
@@ -46,7 +46,7 @@ export function KpiStrip() {
         <dl className="relative grid grid-cols-2 gap-y-10 lg:grid-cols-4">
           {kpis.map((k, i) => (
             <div key={k.id} className={`px-2 sm:px-6 ${i > 0 ? 'lg:border-l lg:border-white/15' : ''} ${i % 2 === 1 ? 'border-l border-white/15 lg:border-l' : ''}`}>
-              <dd className={`text-5xl font-extrabold tracking-tight sm:text-6xl ${k.value === TBC ? 'text-white/40' : ''}`}>
+              <dd className={`text-4xl font-extrabold tracking-tight sm:text-6xl ${k.value === TBC ? 'text-white/40' : ''}`}>
                 {k.value === TBC ? k.value : <CountUp value={k.value} />}
               </dd>
               <dt className="mt-3 text-sm font-bold">{k.label}</dt>

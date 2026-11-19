@@ -43,9 +43,23 @@ html {
   scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 
-html,
+/* Phones: scale the whole rem-based type and spacing system down slightly. */
+@media (max-width: 639px) {
+  html {
+    font-size: 93.75%;
+  }
+}
+
+/* Stop decorative glows from causing sideways scroll. `hidden` is the
+   fallback for older mobile browsers that don't support `clip`. */
 body {
-  overflow-x: clip;
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
 }
 
 body {

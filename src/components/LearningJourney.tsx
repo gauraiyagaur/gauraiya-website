@@ -60,7 +60,7 @@ export function LearningJourney() {
                     <p className="mt-2 text-sm leading-snug text-ink-soft">{m.summary}</p>
                     <Chips m={m} />
                     {/* Mobile: details open inline */}
-                    <div className="lg:hidden">
+                    <div className="relative z-10 -ml-[4.75rem] lg:hidden">
                       <AnimatePresence initial={false}>
                         {isActive ? (
                           <motion.div
@@ -297,7 +297,7 @@ function Groups({ m, color }: { m: JourneyMilestone; color: string }) {
   return (
     <div className="grid gap-4 xl:grid-cols-2">
       {m.groups.map((g) => (
-        <div key={g.label} className="rounded-2xl border border-line bg-paper/60 p-4">
+        <div key={g.label} className="rounded-2xl border border-line bg-paper/60 p-3.5 sm:p-4">
           <p className="mb-3 text-[0.6875rem] font-bold uppercase tracking-[0.12em]" style={{ color }}>
             {g.label}
           </p>
@@ -445,11 +445,11 @@ function Glance() {
           <span className="h-2.5 w-2.5 rounded-full bg-peach/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-mint/70" />
           <span className="ml-3 truncate rounded-full bg-paper px-3 py-0.5 text-[0.625rem] font-semibold text-muted">luxcal · brand AI calibration</span>
-          <span className="ml-auto rounded-full bg-accent-soft px-2 py-0.5 text-[0.5625rem] font-bold text-accent">Concept preview</span>
+          <span className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-accent-soft px-2 py-0.5 text-[0.5625rem] font-bold text-accent">Concept preview</span>
         </div>
 
         <div className="overflow-x-auto">
-          <div className="grid min-w-[600px] grid-cols-[0.9fr_1.1fr] gap-3 p-4">
+          <div className="grid grid-cols-1 gap-3 p-3 sm:min-w-[600px] sm:grid-cols-[0.9fr_1.1fr] sm:p-4">
             {/* Left: input + run status */}
             <div className="space-y-3">
               <div className="rounded-xl border border-line bg-white p-3">

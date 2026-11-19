@@ -12,7 +12,7 @@ export function ProjectsSection() {
       <div className="container-grid">
         <SectionHeading index="02" label="Completed work" id="work-title" title={<>Shipped <span className="text-gradient">&amp; evaluated.</span></>}>
           Hover or tap a card for the impact, stack and code.{' '}
-          <a href={profile.projectsRepo} className="font-semibold text-accent hover:underline">
+          <a href={profile.projectsRepo} target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
             All code on GitHub ↗
           </a>
         </SectionHeading>
@@ -137,7 +137,7 @@ function Stack({ items }: { items: string[] }) {
 function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
   const featured = Boolean(p.reflection)
   const header = (
-    <div className={`p-5 pr-14 sm:p-6 sm:pr-14 ${featured ? 'lg:grid lg:grid-cols-12 lg:gap-8' : ''}`}>
+    <div className={`p-5 sm:p-6 ${featured ? 'lg:grid lg:grid-cols-12 lg:gap-8' : 'pr-14 sm:pr-14'}`}>
       <div className={featured ? 'lg:col-span-7' : ''}>
         <div className="flex flex-wrap items-center gap-2">
           <span className="flex h-11 w-11 items-center justify-center rounded-full text-white" style={{ backgroundColor: ICON_COLORS[index % ICON_COLORS.length] }}>
@@ -146,7 +146,7 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
           {featured ? <span className="eyebrow !bg-pink-soft !text-pink">Featured</span> : null}
           <span className="text-xs font-semibold text-muted">{p.category}</span>
         </div>
-        <h4 className={`mt-4 font-extrabold leading-tight tracking-tight ${featured ? 'text-3xl sm:text-4xl' : 'text-xl sm:text-2xl'}`}>
+        <h4 className={`mt-4 font-extrabold leading-tight tracking-tight ${featured ? 'text-2xl sm:text-4xl' : 'text-xl sm:text-2xl'}`}>
           {p.title}
         </h4>
         <p className="mt-2 text-sm leading-relaxed text-ink-soft sm:text-base">{featured ? p.summary : p.hook}</p>
@@ -186,13 +186,14 @@ function ProjectCard({ p, index }: { p: ProjectItem; index: number }) {
         {p.repoUrl ? (
           <a
             href={p.repoUrl}
+            target="_blank" rel="noopener noreferrer"
             className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
           >
             <Icon name="github" size={16} /> View code<span className="sr-only">: {p.title}</span>
           </a>
         ) : null}
         {p.liveUrl ? (
-          <a href={p.liveUrl} className="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-accent hover:text-accent">
+          <a href={p.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-accent hover:text-accent">
             Live ↗<span className="sr-only">: {p.title}</span>
           </a>
         ) : null}

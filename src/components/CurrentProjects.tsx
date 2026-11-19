@@ -45,7 +45,7 @@ export function CurrentProjects() {
                     ))}
                   </ul>
                   {b.linkUrl ? (
-                    <a href={b.linkUrl} className="mt-auto pt-6 text-sm font-semibold text-white underline-offset-4 hover:underline">
+                    <a href={b.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-auto pt-6 text-sm font-semibold text-white underline-offset-4 hover:underline">
                       View ↗<span className="sr-only">: {b.title}</span>
                     </a>
                   ) : b.linkNote ? (
