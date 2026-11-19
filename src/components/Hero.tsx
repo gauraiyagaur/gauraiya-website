@@ -138,6 +138,49 @@ export function Hero() {
             </div>
           </motion.div>
         </div>
+
+        {/* Phones: the floating cards become a swipeable row under the photo */}
+        <ul
+          className="order-first -mx-4 -mt-4 flex snap-x snap-mandatory scroll-pl-4 items-start gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:hidden"
+          aria-label="Highlights"
+        >
+          <li className="card w-64 shrink-0 snap-start p-4">
+            <p className="flex items-center gap-2 text-xs font-semibold text-pink">
+              <Icon name="users" size={13} stroke={2.5} /> Key insight · The human edge
+            </p>
+            <p className="mt-1.5 text-sm font-extrabold leading-snug">I speak every room’s language.</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink-soft">
+              Praised for stakeholder management, and connects with people of any age group over shared interests.
+            </p>
+          </li>
+          <li className="card w-64 shrink-0 snap-start p-4">
+            <p className="flex items-center gap-2 text-xs font-semibold text-accent">
+              <Icon name="code" size={13} stroke={2.5} /> Why AI
+            </p>
+            <p className="mt-1.5 text-sm font-extrabold leading-snug">Backend alone wasn’t my scene.</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink-soft">
+              So I moved into AI. It gives me room to go beyond development, measure impact and give the business real reasoning.
+            </p>
+          </li>
+          <li className="card flex w-44 shrink-0 snap-start items-center gap-3 p-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-white">
+              <Icon name="trophy" size={16} />
+            </span>
+            <span>
+              <span className="block text-lg font-extrabold leading-none">×4</span>
+              <span className="mt-1 block text-xs text-ink-soft">Distinction modules</span>
+            </span>
+          </li>
+          <li className="card flex w-48 shrink-0 snap-start items-center gap-3 p-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-peach-soft text-peach">
+              <Icon name="briefcase" size={16} />
+            </span>
+            <span>
+              <span className="block text-sm font-extrabold leading-none">3.5 yrs</span>
+              <span className="mt-1 block text-xs text-ink-soft">Enterprise data science</span>
+            </span>
+          </li>
+        </ul>
       </div>
     </section>
   )
